@@ -447,6 +447,11 @@ a.spk-card{text-decoration:none; color:inherit; display:block}
 .ticker:hover .tick-track{animation-play-state:paused}
 .tick-item{font-family:var(--display); font-weight:700; color:var(--navy); font-size:15px; padding:0 30px; position:relative}
 .tick-item::after{content:"◆"; position:absolute; right:-4px; top:2px; color:var(--gold); font-size:8px}
+.tick-track{align-items:center}
+.tick-mask{padding-top:8px; padding-bottom:8px}
+.tick-item.logo-item{display:inline-flex; align-items:center}
+.tick-logo{height:34px; width:auto; max-width:150px; object-fit:contain; display:block; vertical-align:middle}
+.tick-item.logo-item::after{top:50%; transform:translateY(-50%)}
 @keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-33.333%)}}
 @media (prefers-reduced-motion: reduce){ .tick-track{animation:none} }
 /* ---------- upvoting, anonymity, sort, held ---------- */
@@ -1514,9 +1519,19 @@ window.openProgramme=openProgramme;
 /* ============================================================
    Sponsors ticker + live presence counter
    ============================================================ */
-const SPONSORS = ["La Roche-Posay","The Learning Hub","The Professional Hub","Richmond Foundation","Playtime and Adventures","The Westin Dragonara Resort"];
+const SPONSORS = [
+  {name:"La Roche-Posay", logo:"https://prijorita.com/assets/la-roche-posay-logo-CpT65n-a.png"},
+  {name:"The Learning Hub", logo:"https://prijorita.com/assets/the-learning-hub-logo-BcV3Volb.jpg"},
+  {name:"The Professional Hub", logo:"https://prijorita.com/assets/the-professional-hub-logo-C4KeDCCz.jpg"},
+  {name:"Richmond Foundation", logo:"https://prijorita.com/assets/richmond-logo-Mu9t-QKr.png"},
+  {name:"Playtime and Adventures", logo:"https://prijorita.com/assets/playtime-0O747HE4.png"},
+  {name:"The Westin Dragonara Resort", logo:""}
+];
 function initTickers(){
-  const items = SPONSORS.map(s=>`<span class="tick-item">${esc(s)}</span>`).join("");
+  const items = SPONSORS.map(s=> s.logo
+    ? `<span class="tick-item logo-item"><img class="tick-logo" src="${s.logo}" alt="${esc(s.name)}" loading="lazy" onerror="this.replaceWith('${esc(s.name)}')"/></span>`
+    : `<span class="tick-item">${esc(s.name)}</span>`
+  ).join("");
   const track = items+items+items;
   document.querySelectorAll(".ticker-host").forEach(e=>{
     e.innerHTML = `<span class="tick-label">${t("sponsorsWord")}</span><span class="tick-mask"><span class="tick-track">${track}</span></span>`;
