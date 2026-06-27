@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Panel Questions · Westin Dragonara Resort</title>
+<!-- Corporate identity fonts: Georgia (serif headings) + Calibri (body) — both system fonts on the
+     conference machines, matching the Prijorità conference PowerPoint template. -->
+
+<style>
+/* ============================================================
+   Prijorità conference corporate identity (from PPT template)
+   Navy #27316E + Gold #B0925C · Georgia serif + Calibri body
+   Light / silvery-white theme
+   ============================================================ */
+:root{
+  /* Brand colours pulled from the conference deck */
+  --ink:#1C2B6B;            /* deepest navy (headings) */
+  --navy:#27316E;           /* primary royal navy */
+  --ink-2:#27316E;
+  --slate:#4A5568;          /* body slate */
+  --gold:#B0925C;           /* Prijorità gold */
+  --gold-deep:#B8962E;      /* deeper ochre gold */
+  --gold-bright:#cdb079;
+  /* accents / lines */
+  --aura-blue:#27316E;      /* brand navy (structure) */
+  --accent:#2f74ff;         /* Aura electric blue (neural / data / focus accent) */
+  --aura-blue-soft:#5b6ba6;
+  --slate-soft:#8899AA;
+  --line:#E2E8F0;
+  --line-strong:#AAB8CC;
+  --panel:rgba(255,255,255,.82);
+  --ok:#1d9e6b;
+  /* bluish-yellow programme button (gold→navy-tinted) */
+  --byb-1:#e7c66a;
+  --byb-2:#8fa3d8;
+  --mono:'Calibri','Segoe UI',system-ui,sans-serif; /* eyebrow labels */
+  --term:'Consolas','SF Mono','SFMono-Regular',ui-monospace,Menlo,monospace; /* animus terminal accents */
+  --display:Georgia,'Times New Roman',serif;        /* serif headings */
+  --body:'Calibri','Segoe UI',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--body);
+  color:var(--ink);
+  background:#eef1f6;
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+/* silvery-white background, with a very faint hotel photo blended in */
+#bg{
+  position:fixed; inset:0; z-index:-2;
+  background:
+    radial-gradient(1100px 620px at 78% -8%, #ffffff, rgba(255,255,255,0) 60%),
+    linear-gradient(158deg,#fbfcfe 0%,#eef1f6 42%,#e2e7f0 78%,#d9dfea 100%);
+}
+#bg::before{
+  content:""; position:absolute; inset:0;
+  background-image:url('westin-bg.jpg');
+  background-size:cover; background-position:center;
+  opacity:.10; filter:grayscale(.4) brightness(1.15);
+  mix-blend-mode:luminosity;
+}
+#bg::after{
+  content:""; position:absolute; inset:0;
+  /* silver sheen */
+  background:linear-gradient(120deg, rgba(255,255,255,.35), rgba(255,255,255,0) 30%, rgba(255,255,255,.25) 75%);
+}
+/* faint animus blueprint grid */
+#grid{
+  position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.5;
+  background-image:linear-gradient(rgba(120,140,180,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(120,140,180,.10) 1px,transparent 1px);
+  background-size:46px 46px;
+  mask-image:radial-gradient(circle at 50% 25%,#000,transparent 92%);
+}
+a{color:inherit}
+.mono{font-family:var(--mono)}
+.node{
+  font-family:var(--body); font-size:11px; letter-spacing:.22em; font-weight:700;
+  color:var(--gold-deep); text-transform:uppercase; opacity:.95;
+  display:inline-flex; align-items:center; gap:9px;
+}
+.node::before{content:"//"; font-family:var(--term); font-weight:700; color:var(--gold-deep); margin-right:3px; letter-spacing:0}
+.gold{color:var(--gold-deep)}
+
+/* ---------- top bar ---------- */
+header{
+  display:flex; align-items:center; gap:18px;
+  padding:14px 22px;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(10px);
+  position:sticky; top:0; z-index:50;
+  flex-wrap:wrap;
+}
+.brand-logos{display:flex; align-items:center; gap:16px}
+.logo-link{display:flex; align-items:center; text-decoration:none}
+.logo-link img{height:34px; width:auto; display:block}
+/* enlarged Aura logo */
+img.aura-img{height:56px}
+.prog-top .brand img.aura-img{height:48px}
+.login-art .art-logos img.aura-img{height:66px}
+.logo-fallback{
+  font-family:var(--display); font-weight:700; font-size:18px; letter-spacing:.02em;
+  padding:6px 12px; border:1px solid var(--line-strong); border-radius:10px;
+  white-space:nowrap; background:#fff;
+}
+.logo-fallback.aura{color:var(--aura-blue); border-color:rgba(47,116,255,.4)}
+.logo-fallback.prijorita{color:var(--gold-deep); border-color:rgba(182,146,84,.55)}
+.logo-divider{width:1px; height:30px; background:var(--line-strong)}
+.head-spacer{flex:1}
+.head-meta{display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:flex-end}
+.meta-block{text-align:right; line-height:1.25}
+.meta-block .place{font-family:var(--display); font-weight:600; font-size:13px; color:var(--ink)}
+.meta-block .clock{font-family:var(--mono); font-size:13px; color:var(--aura-blue)}
+.btn{
+  font-family:var(--display); font-weight:600; font-size:13px; letter-spacing:.02em;
+  border:1px solid var(--line-strong); background:#fff;
+  color:var(--ink); padding:9px 14px; border-radius:10px; cursor:pointer;
+  transition:.18s; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+}
+.btn:hover{border-color:var(--aura-blue); background:rgba(47,116,255,.08)}
+.btn-ghost{background:transparent}
+.lang-toggle{display:flex; border:1px solid var(--line-strong); border-radius:10px; overflow:hidden; background:#fff}
+.lang-toggle button{
+  font-family:var(--mono); font-size:12px; padding:8px 11px; background:transparent;
+  color:var(--slate); border:0; cursor:pointer; transition:.15s;
+}
+.lang-toggle button{display:inline-flex; align-items:center; gap:6px}
+.lang-toggle button.active{background:var(--gold); color:#fff; font-weight:700}
+.lang-toggle .flag{height:13px; width:auto; border:0.5px solid rgba(0,0,0,.14); border-radius:2px; display:block; flex:none}
+.lang-toggle button{display:inline-flex; align-items:center}
+.flag{height:13px; width:auto; border-radius:2px; margin-right:6px; box-shadow:0 0 0 1px rgba(20,28,55,.18); display:block}
+
+/* bluish-yellow programme button */
+.btn-prog{
+  position:relative; border:0; color:#1b2230; font-weight:700;
+  background:linear-gradient(100deg,var(--byb-1),var(--byb-2));
+  box-shadow:0 0 0 1px rgba(255,213,74,.55), 0 8px 22px rgba(47,116,255,.25), inset 0 1px 0 rgba(255,255,255,.55);
+}
+.btn-prog:hover{filter:brightness(1.05); transform:translateY(-1px)}
+
+/* ---------- login overlay ---------- */
+#login{
+  position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center;
+  padding:20px;
+}
+.login-card{
+  width:min(460px,100%);
+  background:rgba(255,255,255,.92);
+  border:1px solid var(--line); border-radius:20px; padding:30px 28px;
+  box-shadow:0 30px 70px rgba(40,60,110,.18), inset 0 1px 0 #fff;
+  backdrop-filter:blur(8px);
+}
+.login-logos{display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:18px}
+.login-card h1{font-family:var(--display); font-weight:700; font-size:25px; line-height:1.15; margin-top:6px; color:var(--ink)}
+.login-card .sub{color:var(--slate); font-size:14px; margin:8px 0 4px}
+.login-card .event{
+  font-family:var(--mono); font-size:12px; color:var(--aura-blue);
+  margin:14px 0 20px; padding:10px 12px; border:1px dashed var(--line-strong); border-radius:10px;
+  background:rgba(47,116,255,.04);
+}
+label.fld{display:block; margin:14px 0 6px; font-size:12px; letter-spacing:.04em; color:var(--slate); font-family:var(--mono); text-transform:uppercase}
+input[type=text],input[type=email],textarea{
+  width:100%; background:#fff; border:1px solid var(--line-strong);
+  border-radius:11px; padding:12px 13px; color:var(--ink); font-family:var(--body); font-size:15px; transition:.15s;
+}
+input::placeholder,textarea::placeholder{color:#9aa3b2}
+input:focus,textarea:focus{outline:0; border-color:var(--aura-blue); background:rgba(47,116,255,.04)}
+.login-card .btn-primary{
+  width:100%; margin-top:20px; justify-content:center; padding:13px;
+  background:linear-gradient(100deg,var(--gold),var(--gold-bright)); color:#3a2c0c; border:0; font-size:15px;
+}
+.login-card .btn-primary:hover{filter:brightness(1.04)}
+/* split login: poster-style thematic art (light, botanical) + form */
+.login-card.split{width:min(940px,100%); padding:0; overflow:hidden; display:grid; grid-template-columns:1.12fr .88fr}
+.login-art{position:relative; padding:38px 36px; color:var(--ink); overflow:hidden; display:flex; flex-direction:column; justify-content:center;
+  background:linear-gradient(155deg,#ffffff 0%,#f7f5f0 52%,#eef1f7 100%);}
+.login-art .art-logos{display:flex; align-items:center; gap:16px; margin-bottom:26px}
+.login-art .art-logos img{height:40px; width:auto; display:block}
+.botanical{position:absolute; right:-26px; top:50%; transform:translateY(-50%); height:108%; pointer-events:none; z-index:1}
+.botanical svg{height:100%; width:auto; display:block}
+.login-art .art-inner{position:relative; z-index:2; max-width:340px}
+.gold-rule{width:46px; height:2px; background:var(--gold); margin-bottom:13px}
+.login-art .tagline{font-family:var(--display); font-style:italic; font-weight:700; color:var(--gold-deep); font-size:20px}
+.art-title{font-family:var(--display); font-weight:700; font-size:41px; line-height:1.05; margin:18px 0 0; color:var(--ink)}
+.art-title .l2{color:var(--navy)}
+.art-when{margin-top:26px; font-size:13px; color:var(--slate); display:flex; flex-direction:column; gap:3px}
+.art-when b{font-family:var(--display); color:var(--ink); font-size:15.5px}
+.art-clock{font-family:var(--mono); color:var(--slate-soft); font-size:12.5px; margin-top:5px}
+.login-form{padding:34px 32px; background:#fff; display:flex; flex-direction:column; justify-content:center; border-left:1px solid var(--line)}
+.login-form .login-logos{justify-content:flex-start}
+/* shared botanical watermark + header tagline */
+#botanicalBg{position:fixed; right:-34px; top:-24px; height:560px; z-index:-1; opacity:.07; pointer-events:none}
+#botanicalBg svg{height:100%; width:auto; display:block}
+.header-tagline{font-family:var(--display); font-style:italic; font-weight:700; color:var(--gold-deep); font-size:15px; position:relative; padding-left:30px}
+.header-tagline::before{content:""; position:absolute; left:0; top:50%; width:20px; height:2px; background:var(--gold); transform:translateY(-50%)}
+@media(max-width:980px){.header-tagline{display:none}}
+@media(max-width:760px){
+  .login-card.split{grid-template-columns:1fr; max-width:460px}
+  .login-art{padding:28px 26px}
+  .botanical{height:210px; right:-16px; top:12px; transform:none; opacity:.6}
+  .art-title{font-size:31px}
+  .login-form{border-left:none; border-top:1px solid var(--line)}
+}
+.login-foot{display:flex; align-items:center; justify-content:space-between; margin-top:18px; gap:10px}
+.err{color:#c0392b; font-size:13px; margin-top:8px; min-height:18px}
+
+/* ---------- main layout ---------- */
+#app{display:none}
+.wrap{
+  display:grid; grid-template-columns:1fr 380px; gap:22px;
+  max-width:1280px; margin:0 auto; padding:26px 22px 60px;
+}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line); border-radius:18px; padding:22px;
+  backdrop-filter:blur(8px);
+  box-shadow:0 12px 34px rgba(40,60,110,.08);
+}
+.panel h2{font-family:var(--display); font-weight:700; font-size:20px; margin:6px 0 4px; color:var(--ink)}
+.panel .lead{color:var(--slate); font-size:14px; margin-bottom:14px}
+
+/* chatbot */
+.chat{
+  border:1px solid var(--line); border-radius:14px; background:#fbfcfe;
+  height:300px; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:12px;
+}
+.msg{max-width:88%; padding:11px 13px; border-radius:13px; font-size:14.5px; line-height:1.5; white-space:pre-wrap}
+.msg.bot{align-self:flex-start; background:#eaf1ff; border:1px solid #cdddff}
+.msg.user{align-self:flex-end; background:#f7efdd; border:1px solid #e7d4a8}
+.msg .who{font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; opacity:.65; display:block; margin-bottom:4px}
+.typing{font-family:var(--mono); font-size:12px; color:var(--aura-blue); padding:4px 2px}
+.chat-row{display:flex; gap:10px; margin-top:12px}
+.chat-row textarea{height:52px; resize:vertical; min-height:52px}
+.suggestion{
+  margin-top:12px; border:1px dashed var(--line-strong); border-radius:12px; padding:12px;
+  background:rgba(29,158,107,.06);
+}
+.suggestion .node{color:var(--ok)}
+.suggestion p{font-size:15px; line-height:1.5; margin:8px 0 10px; color:var(--ink)}
+.row-btns{display:flex; gap:10px; flex-wrap:wrap}
+.btn-submit{background:linear-gradient(100deg,var(--gold),var(--gold-bright)); color:#3a2c0c; border:0; font-weight:700}
+.btn-submit:hover{filter:brightness(1.04)}
+.hint{font-family:var(--mono); font-size:11px; color:var(--slate)}
+
+/* sidebar questions */
+.side h2{display:flex; align-items:center; justify-content:space-between}
+.qcount{font-family:var(--mono); font-size:12px; color:var(--aura-blue); border:1px solid var(--line-strong); border-radius:20px; padding:3px 10px; background:#fff}
+.qlist{display:flex; flex-direction:column; gap:12px; margin-top:14px; max-height:70vh; overflow-y:auto; padding-right:4px}
+.qcard{border:1px solid var(--line); border-radius:13px; padding:13px 14px; background:#fff; transition:.15s; box-shadow:0 4px 12px rgba(40,60,110,.05)}
+.qcard:hover{border-color:var(--line-strong)}
+.qcard .qmeta{display:flex; justify-content:space-between; align-items:center; margin-bottom:7px}
+.qcard .qauthor{font-family:var(--display); font-weight:600; font-size:13px; color:var(--gold-deep)}
+.qcard .qtime{font-family:var(--mono); font-size:10.5px; color:var(--slate)}
+.qcard .qtext{font-size:14.5px; line-height:1.5; color:var(--ink)}
+.qcard.mine{border-left:3px solid var(--gold)}
+.empty{color:var(--slate); font-size:14px; text-align:center; padding:30px 10px; font-family:var(--mono)}
+
+/* ---------- viewer / collector mode ---------- */
+#viewer{display:none; padding:30px 24px 60px; max-width:1400px; margin:0 auto}
+.viewer-head{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:6px}
+.viewer-head h1{font-family:var(--display); font-weight:700; font-size:30px; color:var(--ink)}
+.viewer-sub{color:var(--slate); font-family:var(--mono); font-size:13px; margin-bottom:22px}
+.vgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:18px}
+.vcard{
+  border:1px solid var(--line-strong); border-radius:16px; padding:20px;
+  background:#fff; box-shadow:0 12px 30px rgba(40,60,110,.10);
+  position:relative; transition:.15s;
+}
+.vcard.done{opacity:.5}
+.vcard .vmeta{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
+.vcard .vauthor{font-family:var(--display); font-weight:700; font-size:16px; color:var(--gold-deep)}
+.vcard .vtime{font-family:var(--mono); font-size:11px; color:var(--slate)}
+.vcard .vtext{font-size:19px; line-height:1.45; color:var(--ink)}
+.vcard .vmail{font-family:var(--mono); font-size:11px; color:var(--slate); margin-top:8px}
+.vcard .vactions{margin-top:14px; display:flex; gap:8px}
+.vcard .mark{font-family:var(--mono); font-size:11px; padding:6px 10px; border-radius:8px; border:1px solid var(--line-strong); background:#fff; color:var(--ink); cursor:pointer}
+.vcard .mark:hover{border-color:var(--ok); color:var(--ok)}
+.viewer-bar{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.live-dot{width:9px; height:9px; border-radius:50%; background:var(--ok); animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(29,158,107,.5)}70%{box-shadow:0 0 0 10px rgba(29,158,107,0)}100%{box-shadow:0 0 0 0 rgba(29,158,107,0)}}
+
+/* ---------- responsive ---------- */
+@media (max-width:880px){
+  .wrap{grid-template-columns:1fr; padding:18px 14px 50px}
+  .side{order:2}
+  .head-meta{width:100%; justify-content:space-between}
+  header{gap:12px}
+  .qlist{max-height:none}
+}
+.tiny{font-size:11px; color:var(--slate); font-family:var(--mono); margin-top:10px; line-height:1.5}
+
+/* ---------- interactive programme explorer ---------- */
+#programme{position:fixed; inset:0; z-index:120; display:none; background:rgba(20,28,55,.55); backdrop-filter:blur(4px); overflow-y:auto; padding:24px}
+.prog-sheet{max-width:980px; margin:0 auto; background:linear-gradient(180deg,#fdfdfb,#f3f6fb); border:1px solid var(--line-strong); border-radius:22px; box-shadow:0 40px 110px rgba(20,28,55,.45); overflow:hidden}
+.prog-top{display:flex; align-items:center; justify-content:space-between; padding:14px 26px; border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(253,253,251,.94); backdrop-filter:blur(8px); z-index:5}
+.prog-top .brand{display:flex; align-items:center; gap:14px}
+.prog-top .brand img{height:30px; width:auto; display:block}
+.prog-close{font-family:var(--display); font-size:22px; line-height:1; border:1px solid var(--line-strong); background:#fff; color:var(--ink); width:40px; height:40px; border-radius:11px; cursor:pointer; transition:.15s}
+.prog-close:hover{border-color:var(--gold); color:var(--gold-deep)}
+.prog-hero{padding:34px 42px 6px}
+.prog-eyebrow{font-family:var(--body); font-size:13px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-deep); font-weight:700}
+.prog-title{font-family:var(--display); font-weight:700; font-size:48px; line-height:1.04; color:var(--ink); margin:14px 0 0}
+.prog-title .l2{color:var(--navy); opacity:.92}
+.prog-subt{font-family:var(--display); font-style:italic; font-size:21px; color:var(--gold-deep); margin:16px 0 0}
+.prog-when{margin-top:20px}
+.prog-when .d{font-family:var(--display); font-weight:700; font-size:17px; color:var(--ink)}
+.prog-when .v{color:var(--slate); font-size:14px; margin-top:2px}
+.prog-tabs{display:flex; gap:8px; padding:24px 42px 0}
+.prog-tab{font-family:var(--display); font-weight:600; font-size:15px; padding:10px 20px; border:1px solid var(--line-strong); border-bottom:none; border-radius:11px 11px 0 0; background:#e9eef5; color:var(--slate); cursor:pointer}
+.prog-tab.active{background:#fff; color:var(--ink); box-shadow:inset 0 -3px 0 var(--gold)}
+.prog-body{padding:22px 42px 40px; background:#fff}
+.glance{font-family:var(--body); font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold-deep); font-weight:700; padding-bottom:10px; border-bottom:1px solid var(--line); margin-bottom:4px}
+.srow{display:grid; grid-template-columns:104px 1fr; gap:16px; padding:16px 0; border-bottom:1px solid var(--line)}
+.srow .stime{font-family:var(--display); font-weight:700; color:var(--gold-deep); font-size:14px; padding-top:2px; white-space:nowrap}
+.oitem{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:5px 0}
+.orole{font-family:var(--display); font-weight:700; color:var(--ink); font-size:13px; min-width:62px}
+.oname{font-family:var(--display); font-weight:700; color:var(--navy); font-size:14px}
+.onote{color:var(--slate); font-size:12.5px; font-style:italic}
+.srow .stitle{font-family:var(--display); font-weight:700; color:var(--ink); font-size:16.5px}
+.srow .sdesc{color:var(--slate); font-style:italic; font-size:14px; margin-top:3px}
+.schips{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+.chip{font-family:var(--body); font-size:12.5px; font-weight:600; padding:6px 12px 6px 8px; border-radius:20px; border:1px solid var(--line-strong); background:#fff; color:var(--navy); cursor:pointer; display:inline-flex; align-items:center; gap:7px; transition:.15s}
+.chip:hover{border-color:var(--gold); color:var(--gold-deep)}
+.chip .av{width:18px; height:18px; border-radius:50%; background:conic-gradient(from 210deg,#16267a,#cfe0ff,#16267a); display:inline-block; flex:none}
+a.chip{text-decoration:none}
+.chip-plain{cursor:default; opacity:.92}
+a.spk-card{text-decoration:none; color:inherit; display:block}
+.spk-plain{cursor:default}
+.prog-presenter{margin-top:16px; font-family:var(--display); font-style:italic; color:var(--gold-deep); font-size:15px}
+.prog-presenter a{color:var(--gold-deep); font-weight:700; text-decoration:none}
+.prog-presenter a:hover{text-decoration:underline}
+.tag{font-family:var(--body); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold-deep); font-weight:700; margin-top:8px}
+.wnum{display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:var(--gold); color:#fff; font-family:var(--display); font-weight:700; font-size:12px; margin-right:9px; flex:none; vertical-align:middle}
+.wkshop{padding:13px 0; border-bottom:1px dashed var(--line)}
+.wkshop:last-child{border-bottom:none}
+.spk-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:16px}
+.spk-card{border:1px solid var(--line); border-radius:16px; padding:22px 18px; background:#fff; text-align:center; cursor:pointer; transition:.15s; box-shadow:0 8px 20px rgba(40,60,110,.06)}
+.spk-card:hover{border-color:var(--gold); transform:translateY(-2px)}
+.spk-ring{width:76px; height:76px; border-radius:50%; margin:0 auto 12px; padding:3px; background:conic-gradient(from 210deg,#16267a,#dce6ff,#16267a)}
+.spk-ring span{display:flex; align-items:center; justify-content:center; width:100%; height:100%; border-radius:50%; background:#fff; font-family:var(--display); font-weight:700; font-size:23px; color:var(--navy)}
+.spk-name{font-family:var(--display); font-weight:700; font-size:16px; color:var(--ink)}
+.spk-role{color:var(--slate); font-size:13px; margin-top:4px}
+.spk-detail-bg{position:fixed; inset:0; z-index:130; display:none; background:rgba(20,28,55,.6); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:20px}
+.spk-detail{max-width:540px; width:100%; background:#fff; border-radius:20px; padding:30px; box-shadow:0 40px 90px rgba(20,28,55,.45); max-height:86vh; overflow-y:auto}
+.spk-detail .top{display:flex; gap:16px; align-items:center}
+.spk-detail .top .spk-ring{margin:0; width:70px; height:70px}
+.spk-detail h3{font-family:var(--display); font-weight:700; font-size:22px; color:var(--ink)}
+.spk-detail .sess{padding:11px 0; border-top:1px solid var(--line)}
+.spk-detail .sess .mt{color:var(--gold-deep); font-family:var(--display); font-weight:700; font-size:12.5px}
+.spk-detail .sess .tt{font-family:var(--display); font-weight:700; color:var(--ink); font-size:14.5px; margin-top:2px}
+.prog-foot{padding:20px 42px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; color:var(--slate); font-size:12px; letter-spacing:.08em; font-family:var(--body); background:#fff}
+.prog-foot .ev{font-weight:700; color:var(--navy); letter-spacing:.14em}
+@media (max-width:680px){
+  #programme{padding:0}
+  .prog-sheet{border-radius:0; min-height:100vh}
+  .prog-title{font-size:34px}
+  .prog-hero,.prog-tabs,.prog-body,.prog-foot{padding-left:22px; padding-right:22px}
+  .srow{grid-template-columns:80px 1fr; gap:12px}
+}
+/* ---------- conversational chat input + submit bar ---------- */
+.chat-row{display:flex; gap:10px; margin-top:12px; align-items:stretch}
+.chat-row textarea{flex:1; height:54px; min-height:54px; resize:none}
+.btn-send{background:var(--navy); color:#fff; border:0; font-weight:700; padding:0 20px; flex:none}
+.btn-send:hover{filter:brightness(1.12)}
+.submit-bar{margin-top:14px; border:1px solid var(--line-strong); border-radius:14px; padding:14px; background:rgba(176,146,92,.08)}
+.submit-bar .sb-label{font-family:var(--display); font-weight:700; color:var(--ink); margin-bottom:10px; font-size:15px}
+.btn-verbatim{background:#fff}
+/* category badge */
+.cat{display:inline-block; font-family:var(--body); font-size:11px; font-weight:700; letter-spacing:.03em; padding:3px 10px; border-radius:20px; background:rgba(39,49,110,.08); color:var(--navy); border:1px solid rgba(39,49,110,.16)}
+/* social card */
+.social-card{margin-top:18px; border:1px solid var(--line); border-radius:16px; padding:16px; background:#fff; box-shadow:0 8px 20px rgba(40,60,110,.05)}
+.social-card h3{font-family:var(--display); font-weight:700; font-size:15px; color:var(--ink); margin-bottom:3px}
+.social-card p{color:var(--slate); font-size:12.5px; margin-bottom:12px}
+.social-links{display:flex; flex-direction:column; gap:13px}
+.soc{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--ink)}
+.soc .gi{width:26px; height:26px; flex:none; display:flex; align-items:center; justify-content:center; transition:.15s}
+.soc .gi svg{width:24px; height:24px; display:block}
+.soc .lbl{font-family:var(--display); font-weight:700; font-size:13.5px; line-height:1.2; display:block}
+.soc .sub{font-size:11.5px; color:var(--slate); display:block; margin-top:1px}
+.soc:hover .lbl{color:var(--gold-deep)}
+.soc:hover .gi{transform:translateY(-1px) scale(1.08)}
+.subscribe-btn{width:100%; justify-content:center; margin-top:14px; background:linear-gradient(100deg,var(--gold),var(--gold-bright)); color:#3a2c0c; border:0; font-weight:700; box-shadow:0 4px 0 #8a6d34, 0 10px 18px rgba(176,146,92,.3); transition:.15s}
+.subscribe-btn:hover{filter:brightness(1.05); transform:translateY(-1px)}
+.subscribe-btn:active{transform:translateY(3px); box-shadow:0 1px 0 #8a6d34, 0 4px 10px rgba(176,146,92,.3)}
+.subscribe-btn.done{background:linear-gradient(100deg,#1d9e6b,#37c98c); color:#fff; box-shadow:0 4px 0 #13794f, 0 10px 18px rgba(29,158,107,.3)}
+.consent{display:flex; align-items:flex-start; gap:9px; margin-top:14px; font-size:12.5px; color:var(--slate); line-height:1.45; cursor:pointer}
+.consent input{width:16px; height:16px; margin-top:1px; accent-color:var(--gold); flex:none}
+/* moderator logos */
+.viewer-logos{display:flex; align-items:center; gap:14px}
+.viewer-logos img{height:28px; width:auto}
+.viewer-logos img.aura-img{height:40px}
+/* presentation display (big screen) */
+#display{display:none; min-height:100vh}
+.disp-head{display:flex; align-items:center; justify-content:space-between; padding:22px 34px; border-bottom:2px solid var(--gold); background:#fff; position:sticky; top:0; z-index:5; flex-wrap:wrap; gap:14px}
+.disp-logos{display:flex; align-items:center; gap:18px}
+.disp-logos img{height:40px; width:auto}
+.disp-logos img.aura-img{height:58px}
+.disp-title{font-family:var(--display); font-weight:700; color:var(--ink); font-size:22px; text-align:right; line-height:1.15}
+.disp-title .sub{font-style:italic; color:var(--gold-deep); font-size:14px; font-weight:700; display:block}
+.disp-body{padding:26px 34px 70px; max-width:1500px; margin:0 auto}
+.disp-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(380px,1fr)); gap:22px}
+.dcard{border:1px solid var(--line-strong); border-left:5px solid var(--gold); border-radius:16px; padding:24px; background:#fff; box-shadow:0 14px 34px rgba(40,60,110,.10)}
+.dcard .dname{font-family:var(--display); font-weight:700; color:var(--gold-deep); font-size:18px}
+.dcard .dq{font-size:22px; line-height:1.4; color:var(--ink); margin:12px 0 14px}
+.disp-empty{grid-column:1/-1; text-align:center; color:var(--slate); font-family:var(--display); font-size:22px; padding:70px 20px}
+/* ---------- mobile polish ---------- */
+@media (max-width:640px){
+  header{padding:10px 13px; gap:10px}
+  .brand-logos{gap:10px}
+  .brand-logos img{height:24px}
+  .brand-logos img.aura-img{height:38px}
+  .head-meta{gap:8px; width:100%; justify-content:space-between}
+  .meta-block{display:none}
+  .btn{font-size:12px; padding:8px 10px}
+  .panel{padding:16px}
+  .chat{height:300px}
+  .chat-row textarea{font-size:16px}
+  .submit-bar .row-btns{flex-direction:column}
+  .submit-bar .row-btns .btn{width:100%; justify-content:center}
+  .login-card.split{max-width:100%}
+  .vgrid{grid-template-columns:1fr}
+  .viewer-head h1{font-size:24px}
+  .viewer-bar{width:100%}
+  .disp-head{padding:13px 16px}
+  .disp-logos img{height:28px} .disp-logos img.aura-img{height:42px}
+  .disp-title{font-size:15px; text-align:left}
+  .disp-body{padding:18px 16px 50px}
+  .disp-grid{grid-template-columns:1fr}
+  .dcard{padding:18px} .dcard .dq{font-size:19px}
+  .prog-hero,.prog-tabs,.prog-body,.prog-foot{padding-left:18px; padding-right:18px}
+}
+/* inputs: avoid iOS zoom on focus */
+@media (max-width:640px){ input[type=text],input[type=email],textarea{font-size:16px} }
+/* ---------- live presence counter ---------- */
+.presence{display:inline-flex; align-items:center; gap:7px; font-family:var(--term); font-size:12px; color:var(--slate); background:#fff; border:1px solid var(--line-strong); border-radius:20px; padding:5px 12px; margin-bottom:14px}
+.presence b{color:var(--navy); font-weight:700}
+.pdot{width:8px; height:8px; border-radius:50%; background:var(--ok); animation:pulse 2s infinite; flex:none}
+/* ---------- sponsors ticker ---------- */
+.ticker{display:flex; align-items:stretch; overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:rgba(255,255,255,.65); margin-top:24px}
+.tick-label{flex:none; display:flex; align-items:center; font-family:var(--term); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-deep); font-weight:700; padding:10px 16px; background:rgba(176,146,92,.14)}
+.tick-mask{flex:1; overflow:hidden; display:flex; align-items:center; padding:9px 0}
+.tick-track{display:inline-flex; white-space:nowrap; animation:tickerScroll 32s linear infinite; will-change:transform}
+.ticker:hover .tick-track{animation-play-state:paused}
+.tick-item{font-family:var(--display); font-weight:700; color:var(--navy); font-size:15px; padding:0 30px; position:relative}
+.tick-item::after{content:"◆"; position:absolute; right:-4px; top:2px; color:var(--gold); font-size:8px}
+@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-33.333%)}}
+@media (prefers-reduced-motion: reduce){ .tick-track{animation:none} }
+/* ---------- upvoting, anonymity, sort, held ---------- */
+.qfoot{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:10px}
+.vote{font-family:var(--term); font-size:12px; border:1px solid var(--line-strong); background:#fff; color:var(--navy); border-radius:20px; padding:4px 12px; cursor:pointer; transition:.15s; flex:none}
+.vote:hover{border-color:var(--gold)}
+.vote.voted{background:var(--navy); color:#fff; border-color:var(--navy)}
+.vote b{font-weight:700}
+.vvotes{font-family:var(--term); font-size:12px; color:var(--navy); font-weight:700}
+.dvotes{font-family:var(--term); font-size:15px; color:var(--gold-deep); font-weight:700; margin-left:8px}
+.anon-tag{font-family:var(--body); font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--slate); border:1px solid var(--line-strong); border-radius:10px; padding:1px 6px; font-weight:700; vertical-align:middle}
+.held-tag{font-family:var(--body); font-size:10.5px; font-weight:700; color:#b54a2b; background:rgba(181,74,43,.10); border:1px solid rgba(181,74,43,.30); border-radius:10px; padding:2px 8px}
+.vcard.held{border-left:4px solid #b54a2b}
+.mark.publish{border-color:var(--ok); color:var(--ok)}
+.anon-check{display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--slate); margin-bottom:10px; cursor:pointer}
+.anon-check input{width:16px; height:16px; accent-color:var(--navy); flex:none}
+.qbar{display:flex; justify-content:flex-end; margin-bottom:10px}
+.sort-toggle{display:inline-flex; border:1px solid var(--line-strong); border-radius:10px; overflow:hidden; background:#fff}
+.sort-toggle button{font-family:var(--display); font-size:12.5px; font-weight:600; padding:7px 13px; background:transparent; color:var(--slate); border:0; cursor:pointer; transition:.15s}
+.sort-toggle button.active{background:var(--navy); color:#fff}
+/* ---------- passcode gate ---------- */
+#gate{position:fixed; inset:0; z-index:140; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(20,28,55,.6); backdrop-filter:blur(6px)}
+.gate-card{width:min(380px,100%); background:#fff; border:1px solid var(--line-strong); border-radius:18px; padding:28px; box-shadow:0 30px 70px rgba(20,28,55,.4)}
+.gate-card h2{font-family:var(--display); font-weight:700; color:var(--ink); font-size:22px; margin:8px 0 14px}
+.gate-card input{width:100%; margin-bottom:6px}
+.gate-card .btn-primary{width:100%; justify-content:center; margin-top:12px; background:linear-gradient(100deg,var(--gold),var(--gold-bright)); color:#3a2c0c; border:0}
+/* ---------- visual rebalance: trim competing motifs ---------- */
+#grid{display:none}                 /* drop the blueprint grid (neural canvas carries the tech motif) */
+#botanicalBg{opacity:.045}          /* soften the botanical watermark so the neural net reads clearly */
+/* ---------- Help me understand explainer ---------- */
+.help-fab{position:fixed; right:22px; bottom:22px; z-index:90; width:54px; height:54px; border-radius:50%; border:0; cursor:pointer; font-family:var(--display); font-weight:700; font-size:24px; color:#fff; background:linear-gradient(150deg,var(--accent),var(--navy)); box-shadow:0 10px 26px rgba(47,116,255,.40); transition:.15s}
+.help-fab:hover{transform:translateY(-2px); filter:brightness(1.05)}
+.help-panel{position:fixed; right:22px; bottom:88px; z-index:91; width:min(360px,calc(100vw - 36px)); background:#fff; border:1px solid var(--line-strong); border-radius:18px; box-shadow:0 24px 60px rgba(20,28,55,.32); padding:16px; display:none; flex-direction:column}
+.help-panel.open{display:flex}
+.help-head{display:flex; align-items:center; justify-content:space-between}
+.help-x{border:0; background:transparent; font-size:22px; color:var(--slate); cursor:pointer; line-height:1}
+.help-sub{font-size:12.5px; color:var(--slate); margin:6px 0 10px}
+.help-chat{border:1px solid var(--line); border-radius:12px; background:#fbfcfe; height:230px; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:10px}
+.help-row{display:flex; gap:8px; margin-top:10px}
+.help-row input{flex:1}
+@media(max-width:640px){ .help-fab{right:14px; bottom:14px} .help-panel{right:8px; left:8px; width:auto; bottom:76px} }
+/* ---------- privacy notice ---------- */
+.privacy-link{display:inline-block; margin-top:9px; font-size:12px; color:var(--navy); text-decoration:underline; cursor:pointer}
+#privacy{position:fixed; inset:0; z-index:135; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(20,28,55,.6); backdrop-filter:blur(6px); overflow-y:auto}
+.privacy-card{position:relative; width:min(560px,100%); background:#fff; border:1px solid var(--line-strong); border-radius:18px; padding:30px; box-shadow:0 30px 70px rgba(20,28,55,.4); max-height:88vh; overflow-y:auto}
+.privacy-card h2{font-family:var(--display); font-weight:700; color:var(--ink); font-size:22px; margin:8px 0 14px}
+.privacy-body p{font-size:13.5px; line-height:1.6; color:var(--slate); margin-bottom:12px}
+.privacy-body b{color:var(--ink)}
+/* ---------- animus animated neural-network background ---------- */
+#neural{position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.72}
+.login-card{will-change:height; overflow:hidden}
+.login-card.split{overflow:hidden}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<canvas id="neural"></canvas>
+<div id="grid"></div>
+<div id="botanicalBg" class="bot-host"></div>
+
+<!-- ============ LOGIN ============ -->
+<div id="login">
+  <div class="login-card split">
+    <!-- poster-style thematic art panel -->
+    <div class="login-art">
+      <div class="botanical bot-host"></div>
+      <div class="art-inner">
+        <div class="art-logos">
+          <a class="logo-link" href="https://prijorita.com" target="_blank" rel="noopener" title="prijorita.com">
+            <img src="prijorita-logo.png" alt="Prijorità" onerror="this.outerHTML='<span class=\'logo-fallback prijorita\'>Prijorità</span>'"/>
+          </a>
+          <a class="logo-link" href="https://auraneurosystems.com" target="_blank" rel="noopener" title="auraneurosystems.com">
+            <img src="aura-logo.png" alt="Aura Neurosystems" class="aura-img" onerror="this.outerHTML='<span class=\'logo-fallback aura\'>AURA</span>'"/>
+          </a>
+        </div>
+        <div class="gold-rule"></div>
+        <div class="tagline">Care Beyond Treatment</div>
+        <div class="art-title">Trauma through<br/><span class="l2">the Lifespan</span></div>
+        <div class="art-when">
+          <b>Saturday, 27 June 2026</b>
+          <span data-i18n="eventPlace">📍 The Westin Dragonara Resort, Malta</span>
+          <span class="art-clock" id="loginClock"></span>
+        </div>
+      </div>
+    </div>
+    <!-- sign-in form -->
+    <div class="login-form">
+      <div class="node" data-i18n="nodeAccess">Create your session</div>
+      <h1 data-i18n="loginTitle">Ask the panel</h1>
+      <p class="sub" data-i18n="loginSub">Create an account in seconds and submit questions to be discussed live during the panel.</p>
+      <label class="fld" for="inName" data-i18n="lblName">Your name</label>
+      <input type="text" id="inName" autocomplete="name" placeholder="e.g. Maria Borg" />
+      <label class="fld" for="inEmail" data-i18n="lblEmail">Email</label>
+      <input type="email" id="inEmail" autocomplete="email" placeholder="you@example.com" />
+      <label class="consent"><input type="checkbox" id="promoOptIn"/> <span data-i18n="consentLabel">I agree that Prijorità &amp; Aura may email me about future events and updates.</span></label>
+      <a href="#" id="privacyLinkBtn" class="privacy-link" data-i18n="privacyLink">Privacy notice</a>
+      <div class="err" id="loginErr"></div>
+      <button class="btn btn-primary" id="btnEnter" data-i18n="enter">Enter →</button>
+      <div class="login-foot">
+        <div class="lang-toggle" id="langToggleLogin">
+          <button data-lang="en" class="active">EN</button>
+          <button data-lang="mt">MT</button>
+        </div>
+        <a class="btn btn-prog" id="progBtnLogin" target="_blank" rel="noopener" data-i18n="programme">Conference programme</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MAIN APP ============ -->
+<div id="app">
+  <header>
+    <div class="brand-logos">
+      <a class="logo-link" href="https://prijorita.com" target="_blank" rel="noopener" title="prijorita.com">
+        <img src="prijorita-logo.png" alt="Prijorità" onerror="this.outerHTML='<span class=\'logo-fallback prijorita\'>Prijorità</span>'"/>
+      </a>
+      <span class="logo-divider"></span>
+      <a class="logo-link" href="https://auraneurosystems.com" target="_blank" rel="noopener" title="auraneurosystems.com">
+        <img src="aura-logo.png" alt="Aura Neurosystems" class="aura-img" onerror="this.outerHTML='<span class=\'logo-fallback aura\'>AURA</span>'"/>
+      </a>
+    </div>
+    <span class="header-tagline">Care Beyond Treatment</span>
+    <div class="head-spacer"></div>
+    <div class="head-meta">
+      <div class="meta-block">
+        <div class="place" data-i18n="placeShort">The Westin Dragonara Resort</div>
+        <div class="clock" id="clock"></div>
+      </div>
+      <a class="btn btn-prog" id="progBtn" target="_blank" rel="noopener" data-i18n="programme">Conference programme</a>
+      <div class="lang-toggle" id="langToggleApp">
+        <button data-lang="en" class="active"><svg class="flag" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30M60,0 0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 60,30" stroke="#C8102E" stroke-width="4"/><path d="M60,0 0,30" stroke="#C8102E" stroke-width="4"/><rect x="25" width="10" height="30" fill="#fff"/><rect y="10" width="60" height="10" fill="#fff"/><rect x="27" width="6" height="30" fill="#C8102E"/><rect y="12" width="60" height="6" fill="#C8102E"/></svg>EN</button>
+        <button data-lang="mt"><svg class="flag" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="40" fill="#fff"/><rect x="30" width="30" height="40" fill="#CF142B"/><g stroke="#8d8d8d" stroke-width="1.5" fill="none"><path d="M4,7 H13 M8.5,2.5 V11"/></g></svg>MT</button>
+      </div>
+      <button class="btn btn-ghost" id="btnLogout" data-i18n="logout">Log out</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- left: composer + chatbot -->
+    <section class="panel">
+      <div class="node" data-i18n="nodeCompose">Compose · refine your question</div>
+      <h2 data-i18n="composeTitle">Refine, then submit your question</h2>
+      <p class="lead" data-i18n="composeLead">Write a draft below. The assistant will help you sharpen it so the panel can answer it well. When you're happy, submit it.</p>
+
+      <div class="chat" id="chat"></div>
+
+      <div class="chat-row">
+        <textarea id="draft" rows="1" data-i18n-ph="draftPh" placeholder="Type your question and press Enter…"></textarea>
+        <button class="btn btn-send" id="btnSend" data-i18n="send">Send</button>
+      </div>
+      <div class="submit-bar" id="submitBar" style="display:none">
+        <div class="sb-label" data-i18n="readyPrompt">Ready to submit?</div>
+        <label class="anon-check"><input type="checkbox" id="anonChk"/> <span data-i18n="submitAnonChk">Submit anonymously</span></label>
+        <div class="row-btns">
+          <button class="btn btn-submit" id="btnSubmitRefined" data-i18n="submitRefined">Submit refined version</button>
+          <button class="btn btn-verbatim" id="btnSubmitVerbatim" data-i18n="submitVerbatim">Submit as I wrote it</button>
+        </div>
+      </div>
+      <p class="tiny" data-i18n="privacyNote">Prototype: accounts &amp; questions are stored in this browser only. For a multi-device live event, a shared backend is needed.</p>
+    </section>
+
+    <!-- right: questions list -->
+    <aside class="panel side">
+      <div class="node" data-i18n="nodeQueue">Live questions</div>
+      <h2><span data-i18n="queueTitle">Questions</span> <span class="qcount" id="qCount">0</span></h2>
+      <p class="lead" data-i18n="queueLead">Submitted questions appear here and will be discussed during the panel.</p>
+      <div class="presence"><span class="pdot"></span><b data-online>0</b>&nbsp;<span data-i18n="onlineNow">online now</span> · <b data-registered>0</b>&nbsp;<span data-i18n="joinedWord">joined</span></div>
+      <div class="qbar"><div class="sort-toggle">
+        <button data-sort="recent" class="active" data-i18n="sortRecent">Recent</button>
+        <button data-sort="top" data-i18n="sortTop">Top</button>
+      </div></div>
+      <div class="qlist" id="qlist"></div>
+
+      <div class="social-card">
+        <h3 data-i18n="socialTitle">Stay connected</h3>
+        <p data-i18n="socialSub">Follow Prijorità for updates and community.</p>
+        <div class="social-links">
+          <a class="soc" href="https://www.facebook.com/prijorita" target="_blank" rel="noopener">
+            <span class="gi"><svg viewBox="0 0 24 24" fill="#1877F2" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 21v-7h2.4l.4-2.8h-2.8V9.4c0-.8.2-1.4 1.4-1.4h1.5V5.5c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2H8.3V14h2.2v7h3z"/></svg></span>
+            <span class="txt"><span class="lbl" data-i18n="fbTitle">Facebook</span><span class="sub" data-i18n="fbSub">Subscribe to our page</span></span>
+          </a>
+          <a class="soc" href="https://www.instagram.com/prijorita/" target="_blank" rel="noopener">
+            <span class="gi"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="igGrad" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#f9a03c"/><stop offset=".45" stop-color="#dc2743"/><stop offset="1" stop-color="#bc1888"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="5.5" stroke="url(#igGrad)" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="url(#igGrad)" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="url(#igGrad)"/></svg></span>
+            <span class="txt"><span class="lbl" data-i18n="igTitle">Instagram</span><span class="sub" data-i18n="igSub">Follow us</span></span>
+          </a>
+          <a class="soc" href="https://chat.whatsapp.com/JJBvaVNk2oUCRQaVJ7jUkB?s=sh&p=a&mlu=0" target="_blank" rel="noopener">
+            <span class="gi"><svg viewBox="0 0 24 24" fill="#25D366" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-1.9-1.2 7.2 7.2 0 0 1-1.3-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4a.4.4 0 0 0 0-.4l-.8-1.9c-.2-.5-.4-.4-.5-.4h-.5a.9.9 0 0 0-.7.3 2.8 2.8 0 0 0-.9 2.1 4.9 4.9 0 0 0 1 2.6 11.2 11.2 0 0 0 4.3 3.8c1.6.6 1.9.5 2.3.5a2.5 2.5 0 0 0 1.6-1.2 2 2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg></span>
+            <span class="txt"><span class="lbl" data-i18n="waTitle">WhatsApp</span><span class="sub" data-i18n="waSub">Professionals — join our community to network</span></span>
+          </a>
+        </div>
+        <button class="btn subscribe-btn" id="btnSubscribe" data-i18n="subscribeBtn">✦ Subscribe to event updates</button>
+      </div>
+    </aside>
+  </div>
+  <div class="ticker ticker-host"></div>
+
+  <!-- Help me understand (non-clinician explainer) -->
+  <button id="helpFab" class="help-fab" aria-label="Help me understand" title="Help me understand">?</button>
+  <div id="helpPanel" class="help-panel" role="dialog" aria-label="Help me understand">
+    <div class="help-head">
+      <div class="node" data-i18n="helpTitle">Help me understand</div>
+      <button id="helpClose" class="help-x" aria-label="Close">×</button>
+    </div>
+    <p class="help-sub" data-i18n="helpSub">Not a clinician? Ask about any term or theme and I'll explain it simply.</p>
+    <div class="help-chat" id="helpChat"></div>
+    <div class="help-row">
+      <input type="text" id="helpInput" data-i18n-ph="helpPh" placeholder="e.g. What is complex PTSD?" />
+      <button class="btn btn-send" id="helpSend" data-i18n="send">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODERATOR / COLLECTOR VIEW ============ -->
+<div id="viewer">
+  <div class="viewer-head">
+    <div>
+      <div class="viewer-logos">
+        <a class="logo-link" href="https://prijorita.com" target="_blank" rel="noopener"><img src="prijorita-logo.png" alt="Prijorità" onerror="this.outerHTML='<span class=\'logo-fallback prijorita\'>Prijorità</span>'"/></a>
+        <span class="logo-divider"></span>
+        <a class="logo-link" href="https://auraneurosystems.com" target="_blank" rel="noopener"><img src="aura-logo.png" alt="Aura Neurosystems" class="aura-img" onerror="this.outerHTML='<span class=\'logo-fallback aura\'>AURA</span>'"/></a>
+      </div>
+      <div class="node" style="margin-top:14px" data-i18n="moderatorTitle">Moderator · questions</div>
+      <h1 data-i18n="viewerTitle">Incoming questions</h1>
+    </div>
+    <div class="viewer-bar">
+      <span class="live-dot"></span><span class="mono" style="font-size:12px;color:var(--ok)">LIVE</span>
+      <div class="sort-toggle"><button data-sort="recent" class="active" data-i18n="sortRecent">Recent</button><button data-sort="top" data-i18n="sortTop">Top</button></div>
+      <button class="btn" id="vToggleDone" data-i18n="hideDone">Hide answered</button>
+      <a class="btn btn-prog" href="?view=display" target="_blank" rel="noopener" data-i18n="openDisplay">Open display screen ↗</a>
+      <a class="btn btn-ghost" href="#" id="vExit" data-i18n="exitViewer">Exit viewer</a>
+    </div>
+  </div>
+  <div class="viewer-sub"><span data-i18n="placeShort">The Westin Dragonara Resort</span> · <span id="viewerClock"></span> · <span id="vCount">0</span> <span data-i18n="questionsWord">questions</span> · <span data-online>0</span> <span data-i18n="onlineNow">online now</span></div>
+  <div class="vgrid" id="vgrid"></div>
+</div>
+
+<!-- ============ PRESENTATION DISPLAY (big screen) ============ -->
+<div id="display">
+  <div class="disp-head">
+    <div class="disp-logos">
+      <a class="logo-link" href="https://prijorita.com" target="_blank" rel="noopener"><img src="prijorita-logo.png" alt="Prijorità" onerror="this.outerHTML='<span class=\'logo-fallback prijorita\'>Prijorità</span>'"/></a>
+      <span class="logo-divider"></span>
+      <a class="logo-link" href="https://auraneurosystems.com" target="_blank" rel="noopener"><img src="aura-logo.png" alt="Aura Neurosystems" class="aura-img" onerror="this.outerHTML='<span class=\'logo-fallback aura\'>AURA</span>'"/></a>
+    </div>
+    <div class="disp-title">Trauma through the Lifespan<span class="sub">Care Beyond Treatment</span></div>
+  </div>
+  <div class="disp-body">
+    <div class="node" style="margin-bottom:16px"><span data-i18n="displayKicker">Live audience questions</span> · <span id="dCount">0</span> · <span data-online>0</span> <span data-i18n="onlineNow">online now</span></div>
+    <div class="disp-grid" id="dgrid"></div>
+    <div class="ticker ticker-host"></div>
+  </div>
+</div>
+
+<!-- ============ PRIVACY NOTICE ============ -->
+<div id="privacy" role="dialog" aria-modal="true" aria-label="Privacy notice">
+  <div class="privacy-card">
+    <button class="prog-close" id="privacyClose" aria-label="Close">×</button>
+    <div class="node">// DATA &amp; PRIVACY</div>
+    <h2 data-i18n="privacyTitle">Privacy notice</h2>
+    <div class="privacy-body">
+      <p><b>Controller.</b> Aura Neurosystems Ltd (Malta, MBR C 115972) is the data controller for this tool; Prijorità Healthcare co-delivers the event.</p>
+      <p><b>What we collect.</b> Your name and email (so you can post questions), the questions you submit, and — only if you tick the box — your consent to receive news about future events.</p>
+      <p><b>AI refinement.</b> If you use the assistant to refine a question, the text of that question is sent to our AI provider (DeepSeek) to suggest a clearer version. Please don't include personal health details you'd rather not have processed — you can always submit your question without the AI.</p>
+      <p><b>Retention.</b> Questions are used during and shortly after the event and then deleted. Marketing emails continue only until you unsubscribe.</p>
+      <p><b>Your rights.</b> You can ask us to access, correct or delete your data, or withdraw consent, at any time — email info@auraneurosystems.com.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PASSCODE GATE (moderator / display) ============ -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="node">// RESTRICTED · MODERATOR</div>
+    <h2 data-i18n="gateTitle">Enter passcode</h2>
+    <input type="password" id="gateInput" autocomplete="off" placeholder="••••••••" />
+    <div class="err" id="gateErr"></div>
+    <button class="btn btn-primary" id="gateBtn" data-i18n="gateEnter">Enter →</button>
+  </div>
+</div>
+
+<!-- ============ INTERACTIVE PROGRAMME EXPLORER ============ -->
+<div id="programme" role="dialog" aria-modal="true" aria-label="Conference programme">
+  <div class="prog-sheet">
+    <div class="prog-top">
+      <div class="brand">
+        <a class="logo-link" href="https://auraneurosystems.com" target="_blank" rel="noopener" title="auraneurosystems.com">
+          <img src="aura-logo.png" alt="Aura Neurosystems" class="aura-img" onerror="this.outerHTML='<span class=\'logo-fallback aura\'>AURA</span>'"/>
+        </a>
+        <span class="logo-divider"></span>
+        <a class="logo-link" href="https://prijorita.com" target="_blank" rel="noopener" title="prijorita.com">
+          <img src="prijorita-logo.png" alt="Prijorità" onerror="this.outerHTML='<span class=\'logo-fallback prijorita\'>Prijorità</span>'"/>
+        </a>
+      </div>
+      <button class="prog-close" id="progClose" aria-label="Close">×</button>
+    </div>
+    <div class="prog-hero">
+      <div class="prog-eyebrow">Clinical &amp; Scientific Conference</div>
+      <h2 class="prog-title">Trauma Through<br/><span class="l2">the Lifespan</span></h2>
+      <div class="prog-subt">From Embodied Wounds to Precision Care</div>
+      <div class="prog-when">
+        <div class="d">Saturday, 27 June 2026</div>
+        <div class="v">The Westin Dragonara Resort · St Julian's, Malta</div>
+      </div>
+      <div class="prog-presenter">Presented by <a href="https://prijorita.com/conference#programme" target="_blank" rel="noopener">Mrs Lisa Spiteri</a></div>
+    </div>
+    <div class="prog-tabs">
+      <button class="prog-tab active" data-ptab="schedule" data-i18n="progScheduleTab">Programme</button>
+      <button class="prog-tab" data-ptab="speakers" data-i18n="progSpeakersTab">Speakers</button>
+    </div>
+    <div class="prog-body">
+      <div id="ptab-schedule">
+        <div class="glance" data-i18n="progGlance">The day at a glance</div>
+        <div id="scheduleList"></div>
+      </div>
+      <div id="ptab-speakers" style="display:none">
+        <div class="spk-grid" id="spkGrid"></div>
+      </div>
+    </div>
+    <div class="ticker ticker-host"></div>
+    <div class="prog-foot">
+      <span class="ev">AURA NEUROSYSTEMS · PRIJORITÀ</span>
+      <span>info@prijorita.com · 7900 1888 · <a id="progPrintable" href="#" target="_blank" rel="noopener" style="color:var(--navy);font-weight:700;text-decoration:none" data-i18n="progPrintable">Printable version ↗</a></span>
+    </div>
+  </div>
+</div>
+<div class="spk-detail-bg" id="spkDetailBg"><div class="spk-detail" id="spkDetail"></div></div>
+
+<script>
+/* ============================================================
+   ⚙  EMBEDDED API CONFIG  (DeepSeek)
+   ------------------------------------------------------------
+   The key below is embedded for the live event and is NOT shown
+   anywhere in the UI. Note: a key in a static file is still
+   technically extractable via browser dev tools / network logs,
+   so use a short-lived key and deactivate it after the event.
+   ============================================================ */
+const DEEPSEEK_API_KEY = ""; // key lives only in the Cloudflare Worker now (used via proxyUrl)
+const CONFIG = {
+  programmeUrl: "programme.jpg",          // drop programme.jpg next to this file (opens new tab)
+  deepseekUrl: "https://api.deepseek.com/chat/completions",
+  deepseekModel: "deepseek-chat",
+  // OPTIONAL: paste your deployed proxy URL here to enable live DeepSeek AI from the browser.
+  // DeepSeek blocks direct browser calls (no CORS), so a tiny proxy is needed for live AI.
+  // When set, the key is held by the proxy (not this file). See deepseek-proxy-worker.js.
+  proxyUrl: "https://panel-backend.gabrieljoshuaellul.workers.dev/refine",
+  // Passcode required to open the moderator + display screens.
+  modPasscode: "1q2w3e4r",
+  // OPTIONAL backend base URL (Cloudflare Worker, see panel-backend-worker.js).
+  // When set, questions / votes / presence / subscribers sync across all devices.
+  apiBase: "https://panel-backend.gabrieljoshuaellul.workers.dev"
+};
+
+/* Botanical / neural motif (gold + soft blue leaves with gold sparkles),
+   echoing the conference poster. Injected into .bot-host elements. */
+const BOTANICAL = `<svg viewBox="0 0 240 480" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <path d="M120 472 C 90 392, 152 332, 112 252 C 84 192, 142 142, 110 72 C 96 42, 122 22, 116 8" stroke="#c9b48a" stroke-width="1.5" opacity="0.55" fill="none" stroke-linecap="round"/>
+  <defs><path id="lf" d="M0 0 C 10 -14, 10 -30, 0 -46 C -10 -30, -10 -14, 0 0 Z"/></defs>
+  <use href="#lf" transform="translate(112 250) rotate(42) scale(1.05)" fill="#cdb079" opacity="0.55"/>
+  <use href="#lf" transform="translate(112 250) rotate(-42) scale(0.92)" fill="#aac1de" opacity="0.5"/>
+  <use href="#lf" transform="translate(140 200) rotate(62) scale(0.85)" fill="#b8962e" opacity="0.45"/>
+  <use href="#lf" transform="translate(95 320) rotate(-55) scale(1.08)" fill="#aac1de" opacity="0.5"/>
+  <use href="#lf" transform="translate(128 360) rotate(50) scale(0.9)" fill="#cdb079" opacity="0.5"/>
+  <use href="#lf" transform="translate(110 130) rotate(36) scale(0.8)" fill="#cdb079" opacity="0.5"/>
+  <use href="#lf" transform="translate(124 88) rotate(-46) scale(0.74)" fill="#aac1de" opacity="0.45"/>
+  <use href="#lf" transform="translate(100 412) rotate(-36) scale(1.0)" fill="#b8962e" opacity="0.42"/>
+  <use href="#lf" transform="translate(150 290) rotate(72) scale(0.8)" fill="#cdb079" opacity="0.45"/>
+  <use href="#lf" transform="translate(85 230) rotate(-72) scale(0.85)" fill="#aac1de" opacity="0.5"/>
+  <use href="#lf" transform="translate(132 420) rotate(58) scale(0.78)" fill="#aac1de" opacity="0.45"/>
+  <g fill="#d8be86">
+    <circle cx="150" cy="160" r="2.4" opacity="0.85"/><circle cx="92" cy="182" r="1.8" opacity="0.7"/>
+    <circle cx="162" cy="330" r="2" opacity="0.7"/><circle cx="80" cy="362" r="1.6" opacity="0.6"/>
+    <circle cx="130" cy="432" r="2.2" opacity="0.75"/><circle cx="120" cy="40" r="1.8" opacity="0.7"/>
+    <circle cx="158" cy="250" r="1.6" opacity="0.65"/><circle cx="96" cy="110" r="1.5" opacity="0.6"/>
+  </g>
+</svg>`;
+
+/* Language flags — UK (Union Jack) for EN, Malta for MT */
+const FLAG_GB = `<svg class="flag" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="2.6"/><path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V30 M0,15 H60" stroke="#C8102E" stroke-width="6"/></svg>`;
+const FLAG_MT = `<svg class="flag" viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="45" height="60" fill="#ffffff"/><rect x="45" width="45" height="60" fill="#CF142B"/><g transform="translate(8,8)" fill="#ffffff" stroke="#b9b9b9" stroke-width="1.6"><path d="M6 0 h6 v6 h6 v6 h-6 v6 h-6 v-6 h-6 v-6 h6 z"/></g></svg>`;
+
+/* ============================================================
+   i18n strings (English + Maltese)
+   ============================================================ */
+const I18N = {
+  en:{
+    nodeAccess:"Create your session",
+    loginTitle:"Ask the panel",
+    loginSub:"Create an account in seconds and submit questions to be discussed live during the panel.",
+    eventPlace:"📍 The Westin Dragonara Resort, Malta",
+    lblName:"Your name", lblEmail:"Email", enter:"Enter →",
+    programme:"Conference programme",
+    placeShort:"The Westin Dragonara Resort",
+    logout:"Log out",
+    nodeCompose:"Compose · ask your question",
+    composeTitle:"Ask your question",
+    composeLead:"Type your question and press Enter. The assistant will help sharpen it, then you can submit your original or the refined version.",
+    draftPh:"Type your question and press Enter…",
+    refine:"✦ Help me refine", submit:"Submit question",
+    nodeSuggested:"Suggested refinement", useSug:"Use this version",
+    privacyNote:"Prototype: accounts & questions are stored in this browser only. For a multi-device live event, a shared backend is needed.",
+    nodeQueue:"Live questions",
+    queueTitle:"Questions",
+    queueLead:"Submitted questions appear here and will be discussed during the panel.",
+    viewerTitle:"Incoming questions", hideDone:"Hide answered", showDone:"Show answered",
+    exitViewer:"Exit viewer", questionsWord:"questions",
+    botWelcome:"Hi! I'm here to help you sharpen your question for the panel. Type your question below and press Enter — I'll suggest a clearer version, then you can submit your original or the refined one.",
+    botNoKey:"The AI assistant isn't configured yet. You can still type and submit your question directly.",
+    botThinking:"Refining…",
+    markDone:"Mark answered", markUndone:"Re-open",
+    needName:"Please enter your name.", needEmail:"Please enter a valid email.",
+    needDraft:"Please write your question first.",
+    submitted:"✓ Submitted! Your question is in the queue.",
+    welcomeBack:"Welcome",
+    progScheduleTab:"Programme", progSpeakersTab:"Speakers",
+    progGlance:"The day at a glance", progSessions:"Sessions",
+    progBioTBA:"Full biography to be added.", progClose:"Close",
+    progPrintable:"Printable version ↗",
+    send:"Send", readyPrompt:"Ready to submit?",
+    submitRefined:"Submit refined version", submitVerbatim:"Submit as I wrote it",
+    readyPromptChat:"When you're ready, submit your original question or the refined version below.",
+    submittedChat:"✓ Added to the queue. Feel free to ask another question.",
+    botNoKeySubmit:"The AI assistant isn't configured, so here's a quick tidy-up:",
+    botUnreachable:"The live assistant isn't reachable right now, so here's a quick tidy-up:",
+    kindRefined:"refined", kindVerbatim:"as written",
+    socialTitle:"Stay connected", socialSub:"Follow Prijorità for updates and community.",
+    fbTitle:"Facebook", fbSub:"Subscribe to our page",
+    igTitle:"Instagram", igSub:"Follow us",
+    waTitle:"WhatsApp", waSub:"Professionals — join our community to network",
+    openDisplay:"Open display screen ↗", displayEmpty:"Waiting for questions…",
+    catWord:"Category", moderatorTitle:"Moderator · questions", displayKicker:"Live audience questions",
+    consentLabel:"I agree that Prijorità & Aura may email me about future events and updates.",
+    subscribeBtn:"✦ Subscribe to event updates", subscribedToast:"✓ Subscribed — thank you!",
+    onlineNow:"online now", joinedWord:"joined", sponsorsWord:"Sponsors", presentedByWord:"Presented by",
+    noQuestionsYet:"No questions yet — be the first!", waitingQ:"Waiting for questions…",
+    anonName:"Anonymous", anonTag:"anonymous", submitAnonChk:"Submit anonymously",
+    sortRecent:"Recent", sortTop:"Top", heldTag:"flagged · hidden", publishBtn:"Publish",
+    tooShort:"Please write a bit more (at least 8 characters).",
+    tooLong:"That's a bit long — please keep it under 500 characters.",
+    dupMsg:"That question has already been asked.",
+    rateMsg:"Please wait a few seconds before submitting again.",
+    rateMax:"You already have a few questions pending — let those be answered first.",
+    heldMsg:"Thanks — your question was sent to the moderator for review.",
+    privacyLink:"Privacy notice", privacyTitle:"Privacy notice", privacyClose:"Close",
+    gateTitle:"Enter passcode", gateEnter:"Enter →", gateWrong:"Incorrect passcode.",
+    clarifyPrompt:"Reply above to refine further, or submit your question as written below.",
+    helpTitle:"Help me understand", helpSub:"Not a clinician? Ask about any term or theme and I'll explain it simply.",
+    helpPh:"e.g. What is complex PTSD?", helpGreeting:"Hi! Ask me to explain any word or idea from the talks in plain language.",
+    helpNoAI:"The explainer needs the AI to be configured.", helpUnreach:"I couldn't reach the explainer right now — please try again."
+  },
+  mt:{
+    nodeAccess:"Oħloq is-sessjoni tiegħek",
+    loginTitle:"Staqsi lill-panel",
+    loginSub:"Oħloq kont fi ftit sekondi u ibgħat il-mistoqsijiet tiegħek biex jiġu diskussi waqt il-panel.",
+    eventPlace:"📍 The Westin Dragonara Resort, Malta",
+    lblName:"Ismek", lblEmail:"Email", enter:"Idħol →",
+    programme:"Programm tal-konferenza",
+    placeShort:"The Westin Dragonara Resort",
+    logout:"Oħroġ",
+    nodeCompose:"Ikteb · irfina l-mistoqsija",
+    composeTitle:"Staqsi l-mistoqsija tiegħek",
+    composeLead:"Ikteb il-mistoqsija tiegħek u agħfas Enter. L-assistent jgħinek tiċċaraha, imbagħad tista' tibgħat l-oriġinal jew il-verżjoni rfinata.",
+    draftPh:"Ikteb il-mistoqsija tiegħek u agħfas Enter…",
+    refine:"✦ Għinni nirfinaha", submit:"Ibgħat il-mistoqsija",
+    nodeSuggested:"Verżjoni suġġerita", useSug:"Uża din il-verżjoni",
+    privacyNote:"Prototip: il-kontijiet u l-mistoqsijiet jinżammu f'dan il-browser biss. Għal avveniment fuq diversi apparati, hemm bżonn backend komuni.",
+    nodeQueue:"Mistoqsijiet diretti",
+    queueTitle:"Mistoqsijiet",
+    queueLead:"Il-mistoqsijiet mibgħuta jidhru hawn u jiġu diskussi waqt il-panel.",
+    viewerTitle:"Mistoqsijiet deħlin", hideDone:"Aħbi l-imwieġba", showDone:"Uri l-imwieġba",
+    exitViewer:"Oħroġ mill-viewer", questionsWord:"mistoqsijiet",
+    botWelcome:"Bonġu! Qiegħed hawn biex ngħinek tiċċara l-mistoqsija tiegħek għall-panel. Ikteb il-mistoqsija hawn taħt u agħfas Enter — nissuġġerixxi verżjoni iktar ċara, imbagħad tista' tibgħat l-oriġinal jew dik irfinata.",
+    botNoKey:"L-assistent AI għadu mhux ikkonfigurat. Xorta tista' tikteb u tibgħat il-mistoqsija tiegħek direttament.",
+    botThinking:"Qed nirfina…",
+    markDone:"Immarka bħala mwieġba", markUndone:"Erġa' iftaħ",
+    needName:"Jekk jogħġbok daħħal ismek.", needEmail:"Jekk jogħġbok daħħal email valida.",
+    needDraft:"Jekk jogħġbok ikteb il-mistoqsija tiegħek l-ewwel.",
+    submitted:"✓ Mibgħuta! Il-mistoqsija tiegħek qiegħda fil-kju.",
+    welcomeBack:"Merħba",
+    progScheduleTab:"Programm", progSpeakersTab:"Kelliema",
+    progGlance:"Il-ġurnata f'daqqa t'għajn", progSessions:"Sessjonijiet",
+    progBioTBA:"Bijografija sħiħa tiżdied aktar 'il quddiem.", progClose:"Agħlaq",
+    progPrintable:"Verżjoni għall-istampar ↗",
+    send:"Ibgħat", readyPrompt:"Lest biex tibgħat?",
+    submitRefined:"Ibgħat il-verżjoni rfinata", submitVerbatim:"Ibgħat kif ktibtha",
+    readyPromptChat:"Meta tkun lest, ibgħat il-mistoqsija oriġinali tiegħek jew il-verżjoni rfinata hawn taħt.",
+    submittedChat:"✓ Miżjuda mal-kju. Tista' tistaqsi mistoqsija oħra.",
+    botNoKeySubmit:"L-assistent AI mhux ikkonfigurat, mela hawn verżjoni rranġata malajr:",
+    botUnreachable:"L-assistent dirett mhux disponibbli bħalissa, mela hawn verżjoni rranġata malajr:",
+    kindRefined:"rfinata", kindVerbatim:"kif inkitbet",
+    socialTitle:"Żomm kuntatt", socialSub:"Segwi lil Prijorità għal aġġornamenti u komunità.",
+    fbTitle:"Facebook", fbSub:"Segwi l-paġna tagħna",
+    igTitle:"Instagram", igSub:"Segwina",
+    waTitle:"WhatsApp", waSub:"Professjonisti — ingħaqdu mal-komunità tagħna biex tagħmlu netwerking",
+    openDisplay:"Iftaħ l-iskrin tal-wiri ↗", displayEmpty:"Qed nistennew il-mistoqsijiet…",
+    catWord:"Kategorija", moderatorTitle:"Moderatur · mistoqsijiet", displayKicker:"Mistoqsijiet diretti mill-udjenza",
+    consentLabel:"Naqbel li Prijorità u Aura jistgħu jibagħtuli emails dwar avvenimenti u aġġornamenti futuri.",
+    subscribeBtn:"✦ Abbona għal aġġornamenti", subscribedToast:"✓ Abbonat — grazzi!",
+    onlineNow:"online issa", joinedWord:"daħlu", sponsorsWord:"Sponsors", presentedByWord:"Ippreżentat minn",
+    noQuestionsYet:"Għad m'hemm l-ebda mistoqsija — kun l-ewwel!", waitingQ:"Qed nistennew il-mistoqsijiet…",
+    anonName:"Anonimu", anonTag:"anonimu", submitAnonChk:"Ibgħat b'mod anonimu",
+    sortRecent:"Reċenti", sortTop:"L-aktar", heldTag:"immarkat · moħbi", publishBtn:"Ippubblika",
+    tooShort:"Jekk jogħġbok ikteb ftit aktar (mill-inqas 8 karattri).",
+    tooLong:"Twila wisq — żommha taħt il-500 karattru.",
+    dupMsg:"Din il-mistoqsija diġà saret.",
+    rateMsg:"Jekk jogħġbok stenna ftit sekondi qabel terġa' tibgħat.",
+    rateMax:"Diġà għandek ftit mistoqsijiet pendenti — ħalli dawk jiġu mwieġba l-ewwel.",
+    heldMsg:"Grazzi — il-mistoqsija tiegħek intbagħtet lill-moderatur biex tiġi riveduta.",
+    privacyLink:"Avviż dwar il-privatezza", privacyTitle:"Avviż dwar il-privatezza", privacyClose:"Agħlaq",
+    gateTitle:"Daħħal il-passcode", gateEnter:"Idħol →", gateWrong:"Passcode żbaljat.",
+    clarifyPrompt:"Wieġeb hawn fuq biex tirfina aktar, jew ibgħat il-mistoqsija kif inhi hawn taħt.",
+    helpTitle:"Għinni nifhem", helpSub:"M'intix kliniku? Staqsi dwar kwalunkwe terminu jew tema u nispjegahielek bi kliem sempliċi.",
+    helpPh:"eż. X'inhu l-PTSD kumpless?", helpGreeting:"Bonġu! Staqsini nispjega kwalunkwe kelma jew idea mit-taħditiet bi kliem sempliċi.",
+    helpNoAI:"L-ispjegatur jeħtieġ li l-AI tkun ikkonfigurata.", helpUnreach:"Ma stajtx nilħaq l-ispjegatur bħalissa — erġa' pprova."
+  }
+};
+
+const LS = { user:"pq_user", lang:"pq_lang", questions:"pq_questions", presence:"pq_presence", known:"pq_known" };
+
+let state = {
+  lang: localStorage.getItem(LS.lang) || "en",
+  user: JSON.parse(localStorage.getItem(LS.user) || "null"),
+  chat: [],
+  hideDone:false,
+  original:"", refined:"",
+  sortMode:"recent"
+};
+
+/* ============================================================
+   i18n apply
+   ============================================================ */
+function t(k){ return (I18N[state.lang] && I18N[state.lang][k]) || I18N.en[k] || k; }
+function applyLang(){
+  document.documentElement.lang = state.lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent = t(el.getAttribute("data-i18n")); });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{ el.placeholder = t(el.getAttribute("data-i18n-ph")); });
+  document.querySelectorAll(".lang-toggle button").forEach(b=>{
+    b.classList.toggle("active", b.getAttribute("data-lang")===state.lang);
+  });
+  renderQuestions(); renderViewer();
+  const td=document.getElementById("vToggleDone");
+  if(td) td.textContent = state.hideDone ? t("showDone") : t("hideDone");
+}
+/* smoothly animate the login card height when content changes (e.g. EN <-> MT) */
+function animateLoginResize(applyFn){
+  const card=document.querySelector(".login-card");
+  const loginVisible = card && document.getElementById("login").style.display!=="none";
+  if(!loginVisible){ applyFn(); return; }
+  const h0=card.offsetHeight;
+  applyFn();
+  const h1=card.offsetHeight;
+  if(h0===h1) return;
+  card.style.height=h0+"px"; void card.offsetHeight; // reflow
+  card.style.transition="height .4s cubic-bezier(.4,0,.2,1)";
+  card.style.height=h1+"px";
+  setTimeout(()=>{ card.style.height=""; card.style.transition=""; }, 440);
+}
+function setLang(l){ animateLoginResize(()=>{ state.lang=l; localStorage.setItem(LS.lang,l); applyLang(); }); }
+
+/* ============================================================
+   Animus animated neural-network background (movement)
+   ============================================================ */
+function initNeural(){
+  const c=document.getElementById("neural"); if(!c) return;
+  const ctx=c.getContext("2d");
+  const dpr=Math.min(window.devicePixelRatio||1, 2);
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const COLORS=["#2f74ff","#2f74ff","#5b9bff","#27316E","#b8962e"]; // Aura electric blue led, navy + occasional gold
+  let W,H,nodes,raf,LINK;
+  function resize(){
+    W=c.width=Math.floor(window.innerWidth*dpr);
+    H=c.height=Math.floor(window.innerHeight*dpr);
+    c.style.width=window.innerWidth+"px"; c.style.height=window.innerHeight+"px";
+    LINK=150*dpr;
+  }
+  function make(){
+    const n=Math.max(28, Math.min(72, Math.round(window.innerWidth*window.innerHeight/24000)));
+    nodes=Array.from({length:n},()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-.5)*0.16*dpr, vy:(Math.random()-.5)*0.16*dpr,
+      r:(Math.random()*1.5+1.0)*dpr, col:COLORS[Math.floor(Math.random()*COLORS.length)]
+    }));
+  }
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<nodes.length;i++){
+      const a=nodes[i]; a.x+=a.vx; a.y+=a.vy;
+      if(a.x<0||a.x>W) a.vx*=-1; if(a.y<0||a.y>H) a.vy*=-1;
+      for(let j=i+1;j<nodes.length;j++){
+        const b=nodes[j], dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
+        if(d<LINK){ ctx.strokeStyle="rgba(47,116,255,"+(0.16*(1-d/LINK)).toFixed(3)+")"; ctx.lineWidth=dpr; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+      }
+    }
+    ctx.globalAlpha=.72;
+    for(const a of nodes){ ctx.fillStyle=a.col; ctx.beginPath(); ctx.arc(a.x,a.y,a.r,0,Math.PI*2); ctx.fill(); }
+    ctx.globalAlpha=1;
+    if(!reduce) raf=requestAnimationFrame(frame);
+  }
+  function start(){ cancelAnimationFrame(raf); resize(); make(); frame(); }
+  start();
+  let to; window.addEventListener("resize",()=>{ clearTimeout(to); to=setTimeout(start,200); });
+}
+
+/* ============================================================
+   Clock
+   ============================================================ */
+function tick(){
+  const now=new Date();
+  const opts={weekday:'short', day:'2-digit', month:'short'};
+  const date=now.toLocaleDateString(state.lang==='mt'?'mt-MT':'en-GB',opts);
+  const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const str=`${date} · ${time}`;
+  ["clock","loginClock","viewerClock"].forEach(id=>{const e=document.getElementById(id); if(e) e.textContent=str;});
+}
+setInterval(tick,1000); tick();
+
+/* ============================================================
+   Questions store
+   ============================================================ */
+function getQuestions(){ return JSON.parse(localStorage.getItem(LS.questions)||"[]"); }
+function saveQuestions(q){ localStorage.setItem(LS.questions, JSON.stringify(q)); }
+/* ----- backend sync (only active when CONFIG.apiBase is set) ----- */
+async function apiGet(p){ try{ const r=await fetch(CONFIG.apiBase+p); return r.ok?await r.json():null; }catch(e){ return null; } }
+function apiPost(p,b){ if(!CONFIG.apiBase) return; try{ fetch(CONFIG.apiBase+p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}); }catch(e){} }
+async function pullQuestions(){ if(!CONFIG.apiBase) return; const d=await apiGet("/questions"); if(d&&Array.isArray(d.questions)){ saveQuestions(d.questions); renderQuestions(); renderViewer(); renderDisplay(); } }
+async function syncPresence(){ if(!CONFIG.apiBase) return;
+  try{ const r=await fetch(CONFIG.apiBase+"/presence",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sid:SESSION_ID,email:state.user?state.user.email:null})});
+    const d=await r.json(); if(d&&typeof d.online==='number'){ document.querySelectorAll("[data-online]").forEach(e=>e.textContent=d.online); } }catch(e){}
+}
+const CATEGORIES = [
+  {label:"Childhood & Development", kw:["child","childhood","ace","adverse","early year","parent","infant","develop","school","adolescen","young","baby","mother","perinatal"]},
+  {label:"Neuroscience & Measurement", kw:["brain","neuro","imaging","scan","biomarker","measure","mri","eeg","precision","phenotype","objective","diagnos"]},
+  {label:"Treatment & Medication", kw:["medication","drug","treatment","therapy","prescrib","antidepress","dose","ssri","medicine","resistant","response","intervention"]},
+  {label:"Clinicians & Wellbeing", kw:["clinician","vicarious","burnout","therapist","staff","carer","compassion","secondary","professional","wellbeing"]},
+  {label:"Trauma & PTSD", kw:["trauma","ptsd","abuse","complex","dissociat","flashback","attachment","violence","neglect"]},
+  {label:"Services & Access", kw:["service","access","wait","cost","referral","malta","prijorita","aura","appointment","fund","public","system","insurance"]}
+];
+function categorise(text){
+  const tl=(text||"").toLowerCase(); let best="General", bestN=0;
+  CATEGORIES.forEach(c=>{ const n=c.kw.reduce((a,k)=>a+(tl.includes(k)?1:0),0); if(n>bestN){bestN=n; best=c.label;} });
+  return best;
+}
+/* ----- spam & safety ----- */
+const PROFANITY=["fuck","fucking","shit","cunt","bitch","asshole","bastard","dickhead","wanker","motherfucker","faggot","nigger","retard"];
+function normalizeQ(s){ return (s||"").toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,' ').trim(); }
+function validateSubmission(text){
+  const t0=(text||"").trim();
+  if(t0.length<8) return {ok:false, msg:t("tooShort")};
+  if(t0.length>500) return {ok:false, msg:t("tooLong")};
+  const norm=normalizeQ(t0);
+  const qs=getQuestions();
+  if(qs.some(q=>normalizeQ(q.text)===norm)) return {ok:false, msg:t("dupMsg")};
+  if(state.user){
+    const mine=qs.filter(q=>q.email===state.user.email);
+    const last=mine.reduce((m,q)=>Math.max(m,q.ts),0);
+    if(Date.now()-last < 8000) return {ok:false, msg:t("rateMsg")};
+    if(mine.filter(q=>!q.done).length>=5) return {ok:false, msg:t("rateMax")};
+  }
+  const words=norm.split(' ');
+  const held = PROFANITY.some(w=>words.includes(w));
+  return {ok:true, held};
+}
+function addQuestion(text, category, kind, anon, held){
+  const q=getQuestions();
+  q.push({ id:'q'+Date.now()+Math.random().toString(36).slice(2,6),
+    text, category:category||"General", kind:kind||"verbatim",
+    anon:!!anon, status: held?"held":"live", votes:0, voters:[],
+    author:state.user.name, email:state.user.email, ts:Date.now(), done:false });
+  saveQuestions(q); renderQuestions(); renderViewer(); renderDisplay();
+  apiPost("/questions", q[q.length-1]);
+}
+function voteQuestion(id){
+  if(!state.user) return;
+  const q=getQuestions(); const i=q.findIndex(x=>x.id===id); if(i<0) return;
+  q[i].voters=q[i].voters||[];
+  const e=state.user.email, vi=q[i].voters.indexOf(e);
+  if(vi>-1) q[i].voters.splice(vi,1); else q[i].voters.push(e);
+  q[i].votes=q[i].voters.length;
+  saveQuestions(q); renderQuestions(); renderViewer(); renderDisplay();
+  apiPost("/vote", {id, email:e});
+}
+window.voteQuestion=voteQuestion;
+function displayName(q){ return q.anon ? t("anonName") : q.author; }
+function sortQs(qs){
+  if(state.sortMode==="top") return qs.sort((a,b)=>(b.votes||0)-(a.votes||0) || b.ts-a.ts);
+  return qs.sort((a,b)=>b.ts-a.ts);
+}
+function setSort(mode){
+  state.sortMode=mode;
+  document.querySelectorAll(".sort-toggle button").forEach(b=>b.classList.toggle("active", b.dataset.sort===mode));
+  renderQuestions(); renderViewer(); renderDisplay();
+}
+function timeAgo(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60) return (state.lang==='mt'?'issa':'just now');
+  if(s<3600) return Math.floor(s/60)+'m';
+  if(s<86400) return Math.floor(s/3600)+'h';
+  return new Date(ts).toLocaleDateString();
+}
+function renderQuestions(){
+  const list=document.getElementById("qlist"); if(!list) return;
+  let qs=sortQs(getQuestions().filter(q=>q.status!=='held'));
+  document.getElementById("qCount").textContent=qs.length;
+  if(!qs.length){ list.innerHTML=`<div class="empty">${esc(t("noQuestionsYet"))}</div>`; return; }
+  const me=state.user&&state.user.email;
+  list.innerHTML=qs.map(q=>{
+    const voted=(q.voters||[]).includes(me);
+    return `<div class="qcard ${me&&q.email===me?'mine':''}">
+      <div class="qmeta"><span class="qauthor">${esc(displayName(q))}</span><span class="qtime">${timeAgo(q.ts)}</span></div>
+      <div class="qtext">${esc(q.text)}</div>
+      <div class="qfoot">
+        ${q.category?`<span class="cat">${esc(q.category)}</span>`:""}
+        <button class="vote ${voted?'voted':''}" onclick="voteQuestion('${q.id}')" aria-label="upvote">▲ <b>${q.votes||0}</b></button>
+      </div>
+    </div>`;}).join("");
+}
+
+/* ============================================================
+   Viewer / collector mode (moderator)
+   ============================================================ */
+function renderViewer(){
+  const grid=document.getElementById("vgrid"); if(!grid) return;
+  let qs=getQuestions().slice();
+  if(state.hideDone) qs=qs.filter(q=>!q.done);
+  qs=sortQs(qs);
+  document.getElementById("vCount").textContent=qs.length;
+  if(!qs.length){ grid.innerHTML=`<div class="empty" style="grid-column:1/-1">${esc(t("waitingQ"))}</div>`; return; }
+  grid.innerHTML=qs.map(q=>`
+    <div class="vcard ${q.done?'done':''} ${q.status==='held'?'held':''}">
+      <div class="vmeta"><span class="vauthor">${esc(q.author)}${q.anon?` <span class="anon-tag">${esc(t("anonTag"))}</span>`:''}</span><span class="vtime">${new Date(q.ts).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</span></div>
+      <div class="vtext">${esc(q.text)}</div>
+      <div style="margin:8px 0"><span class="cat">${esc(q.category||'General')}</span> ${q.status==='held'?`<span class="held-tag">${esc(t("heldTag"))}</span>`:''} <span class="vvotes">▲ ${q.votes||0}</span></div>
+      <div class="vmail">${esc(q.email)} · ${q.kind==='refined'?t('kindRefined'):t('kindVerbatim')}</div>
+      <div class="vactions">
+        ${q.status==='held'?`<button class="mark publish" onclick="publishQuestion('${q.id}')">${esc(t("publishBtn"))}</button>`:''}
+        <button class="mark" onclick="toggleDone('${q.id}')">${q.done?t("markUndone"):t("markDone")}</button>
+      </div>
+    </div>`).join("");
+}
+function toggleDone(id){
+  const q=getQuestions(); const i=q.findIndex(x=>x.id===id);
+  if(i>-1){ q[i].done=!q[i].done; saveQuestions(q); renderViewer(); renderQuestions(); renderDisplay(); apiPost("/done",{id, passcode:CONFIG.modPasscode}); }
+}
+window.toggleDone=toggleDone;
+function publishQuestion(id){
+  const q=getQuestions(); const i=q.findIndex(x=>x.id===id);
+  if(i>-1){ q[i].status="live"; saveQuestions(q); renderViewer(); renderQuestions(); renderDisplay(); apiPost("/publish",{id, passcode:CONFIG.modPasscode}); }
+}
+window.publishQuestion=publishQuestion;
+/* presentation display (big screen): name + final question + category */
+function renderDisplay(){
+  const grid=document.getElementById("dgrid"); if(!grid) return;
+  const qs=sortQs(getQuestions().filter(q=>!q.done && q.status!=='held'));
+  const cEl=document.getElementById("dCount"); if(cEl) cEl.textContent=qs.length;
+  if(!qs.length){ grid.innerHTML=`<div class="disp-empty">${t("displayEmpty")}</div>`; return; }
+  grid.innerHTML=qs.map(q=>`
+    <div class="dcard">
+      <div class="dname">${esc(displayName(q))} ${q.votes?`<span class="dvotes">▲ ${q.votes}</span>`:""}</div>
+      <div class="dq">${esc(q.text)}</div>
+      <span class="cat">${esc(q.category||'General')}</span>
+    </div>`).join("");
+}
+
+/* ============================================================
+   Chatbot (DeepSeek)
+   ============================================================ */
+function pushMsg(role,text){
+  state.chat.push({role,text});
+  const chat=document.getElementById("chat");
+  const div=document.createElement("div");
+  div.className="msg "+(role==="user"?"user":"bot");
+  div.innerHTML=`<span class="who">${role==="user"?(state.user?esc(state.user.name):"you"):"assistant"}</span>${esc(text)}`;
+  chat.appendChild(div); chat.scrollTop=chat.scrollHeight;
+}
+function keyReady(){ return DEEPSEEK_API_KEY && !/PASTE_YOUR/.test(DEEPSEEK_API_KEY); }
+function setSubmitBar(show, hasRefined){
+  const bar=document.getElementById("submitBar"); if(!bar) return;
+  bar.style.display=show?"block":"none";
+  const rb=document.getElementById("btnSubmitRefined");
+  if(rb) rb.style.display=hasRefined?"inline-flex":"none";
+}
+/* lightweight offline tidy-up so the "refined" option always works without a network */
+function offlineRefine(text){
+  let s=(text||"").trim().replace(/\s+/g,' ');
+  const lead=/^(um+|uh+|erm+|so|well|like|ok(ay)?|hi|hello|hey|please|i (just )?(want(ed)?|wanted) to ask|i was wondering|i'd like to know|i would like to know|my question is|i guess|basically|just)[\s,:-]+/i;
+  for(let k=0;k<4 && lead.test(s);k++){ s=s.replace(lead,''); }
+  if(s) s=s.charAt(0).toUpperCase()+s.slice(1);
+  s=s.replace(/[.!?\s]+$/,'');
+  return s+"?";
+}
+function fallbackRefine(text, note){
+  state.refined=offlineRefine(text);
+  pushMsg("bot", note + " “" + state.refined + "”");
+  pushMsg("bot", t("readyPromptChat"));
+  setSubmitBar(true, !!state.refined);
+}
+async function sendChat(){
+  const ta=document.getElementById("draft");
+  const text=ta.value.trim();
+  if(!text) return;
+  pushMsg("user",text);
+  state.original=text;
+  ta.value=""; ta.style.height="";
+  if(!keyReady() && !CONFIG.proxyUrl){ fallbackRefine(text, t("botNoKeySubmit")); return; }
+  const chat=document.getElementById("chat");
+  const typing=document.createElement("div"); typing.className="typing"; typing.textContent=t("botThinking");
+  chat.appendChild(typing); chat.scrollTop=chat.scrollHeight;
+
+  const sys = state.lang==='mt'
+    ? "Inti assistent li jgħin lin-nies jiċċaraw mistoqsija waħda biex jistaqsuha lil panel f'konferenza dwar it-trawma. Wieġeb bil-Malti, b'ton sħun u qasir. Jekk il-mistoqsija hija vaga jew tista' tfisser affarijiet differenti, staqsi MISTOQSIJA WAĦDA ta' kjarifika u tirfinax għalissa. Jekk hija ċara biżżejjed, agħti verżjoni mtejba ta' frażi jew tnejn li tibda bl-eżatt prefiss 'REFINED: ', imbagħad nota qasira ta' x'bdilt. Żomm il-fehma tal-utent."
+    : "You help attendees clarify ONE question for a panel at a conference on trauma. Be warm and brief. If the draft is vague or could mean different things, ask ONE short clarifying question and do NOT refine yet. If it is clear enough, give an improved one-or-two sentence version beginning with the exact prefix 'REFINED: ', then a short note on what you changed. Keep the user's intent.";
+  try{
+    const useProxy = !!CONFIG.proxyUrl;
+    const url = useProxy ? CONFIG.proxyUrl : CONFIG.deepseekUrl;
+    const headers = {"Content-Type":"application/json"};
+    if(!useProxy) headers["Authorization"]="Bearer "+DEEPSEEK_API_KEY;
+    const body={ model:CONFIG.deepseekModel,
+      messages:[{role:"system",content:sys},{role:"user",content:"My draft question: "+text}],
+      temperature:0.6, max_tokens:400, stream:false };
+    const res=await fetch(url,{ method:"POST", headers, body:JSON.stringify(body) });
+    typing.remove();
+    if(!res.ok){ fallbackRefine(text, "⚠ "+t("botUnreachable")); return; }
+    const data=await res.json();
+    const out=data?.choices?.[0]?.message?.content || "";
+    const m=out.match(/REFINED:\s*([\s\S]*?)(?:\n\n|\n[-•]|$)/i);
+    state.refined=(m && m[1]) ? m[1].trim() : "";
+    if(out) pushMsg("bot", out.replace(/REFINED:\s*/i,"").trim());
+    pushMsg("bot", state.refined ? t("readyPromptChat") : t("clarifyPrompt"));
+    setSubmitBar(true, !!state.refined);
+  }catch(err){
+    typing.remove();
+    fallbackRefine(text, "⚠ "+t("botUnreachable"));
+  }
+}
+function submitQuestion(useRefined){
+  const text = (useRefined && state.refined) ? state.refined : state.original;
+  if(!text){ toast(t("needDraft")); return; }
+  const v=validateSubmission(text);
+  if(!v.ok){ toast(v.msg); return; }
+  const ac=document.getElementById("anonChk");
+  const anon = !!(ac && ac.checked);
+  addQuestion(text, categorise(text), (useRefined && state.refined) ? "refined" : "verbatim", anon, v.held);
+  toast(v.held ? t("heldMsg") : t("submitted"));
+  pushMsg("bot", v.held ? t("heldMsg") : t("submittedChat"));
+  setSubmitBar(false,false);
+  state.original=""; state.refined="";
+  if(ac) ac.checked=false;
+}
+
+/* ----- "Help me understand" explainer (non-clinicians) ----- */
+function helpMsg(role,text){
+  const hc=document.getElementById("helpChat");
+  const d=document.createElement("div"); d.className="msg "+(role==="user"?"user":"bot");
+  d.innerHTML=`<span class="who">${role==="user"?(state.user?esc(state.user.name):"you"):"explainer"}</span>${esc(text)}`;
+  hc.appendChild(d); hc.scrollTop=hc.scrollHeight;
+}
+async function helpAsk(){
+  const inp=document.getElementById("helpInput"); const q=inp.value.trim(); if(!q) return;
+  helpMsg("user",q); inp.value="";
+  const useProxy=!!CONFIG.proxyUrl;
+  if(!useProxy && !keyReady()){ helpMsg("bot",t("helpNoAI")); return; }
+  const hc=document.getElementById("helpChat");
+  const typing=document.createElement("div"); typing.className="typing"; typing.textContent=t("botThinking");
+  hc.appendChild(typing); hc.scrollTop=hc.scrollHeight;
+  const sys = state.lang==='mt'
+    ? "Inti edukatur li tispjega termini tas-saħħa mentali u tat-trawma b'lingwaġġ sempliċi u sħun għal nies li mhumiex kliniċi f'konferenza. Wieġeb bil-Malti fi 2-4 sentenzi qosra, mingħajr ġargon. Jekk xi ħaġa mhix ċara, għidha fil-qosor."
+    : "You are an educator who explains mental-health and trauma terms in plain, warm language for non-clinicians at a conference. Answer in 2-4 short sentences, no jargon. If something is unclear, say so briefly.";
+  try{
+    const url=useProxy?CONFIG.proxyUrl:CONFIG.deepseekUrl;
+    const headers={"Content-Type":"application/json"}; if(!useProxy) headers["Authorization"]="Bearer "+DEEPSEEK_API_KEY;
+    const res=await fetch(url,{method:"POST",headers,body:JSON.stringify({model:CONFIG.deepseekModel,messages:[{role:"system",content:sys},{role:"user",content:q}],temperature:0.4,max_tokens:300,stream:false})});
+    typing.remove();
+    if(!res.ok){ helpMsg("bot",t("helpUnreach")); return; }
+    const data=await res.json(); const out=data?.choices?.[0]?.message?.content||"(no response)";
+    helpMsg("bot",out);
+  }catch(e){ typing.remove(); helpMsg("bot",t("helpUnreach")); }
+}
+window.helpAsk=helpAsk;
+
+/* ============================================================
+   Helpers
+   ============================================================ */
+function esc(s){ return (s||"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toast(msg){
+  const td=document.createElement("div");
+  td.textContent=msg;
+  td.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(100deg,var(--gold),var(--gold-bright));color:#3a2c0c;font-family:var(--display);font-weight:700;padding:12px 20px;border-radius:12px;z-index:200;box-shadow:0 12px 30px rgba(40,60,110,.25)";
+  document.body.appendChild(td); setTimeout(()=>td.remove(),2600);
+}
+
+/* ============================================================
+   Auth / routing
+   ============================================================ */
+function validEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+function login(){
+  const name=document.getElementById("inName").value.trim();
+  const email=document.getElementById("inEmail").value.trim();
+  const err=document.getElementById("loginErr");
+  if(!name){ err.textContent=t("needName"); return; }
+  if(!validEmail(email)){ err.textContent=t("needEmail"); return; }
+  err.textContent="";
+  const promo=document.getElementById("promoOptIn");
+  const optIn = !!(promo && promo.checked);
+  state.user={name,email,since:Date.now(), promoOptIn:optIn,
+    consentVersion: optIn?"v1-2026":null, consentTs: optIn?Date.now():null};
+  localStorage.setItem(LS.user,JSON.stringify(state.user));
+  if(optIn) apiPost("/subscribe",{name,email,consentTs:state.user.consentTs});
+  enterApp();
+}
+function enterApp(){
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").style.display="block";
+  if(!state.chat.length){ pushMsg("bot",t("welcomeBack")+", "+state.user.name+". "+t("botWelcome")); }
+  renderQuestions();
+  registerKnown(state.user.email); presenceBeat();
+}
+function logout(){
+  localStorage.removeItem(LS.user); state.user=null; state.chat=[];
+  document.getElementById("chat").innerHTML="";
+  document.getElementById("app").style.display="none";
+  document.getElementById("login").style.display="flex";
+}
+function routeView(){
+  const h=location.hash.toLowerCase(); const v=new URLSearchParams(location.search).get("view");
+  if(h.includes("display")||v==="display") return "display";
+  if(h.includes("collector")||v==="collector") return "collector";
+  // Served from backend.* (e.g. backend.auraneurosystems.com) -> moderator review view by default
+  if((location.hostname||"").toLowerCase().startsWith("backend")) return "collector";
+  return null;
+}
+function showViewer(){
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").style.display="none";
+  document.getElementById("viewer").style.display="block";
+  renderViewer(); updateCounters();
+}
+function showDisplay(){
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").style.display="none";
+  document.getElementById("display").style.display="block";
+  renderDisplay(); updateCounters();
+}
+function requireGate(onOk){
+  if(sessionStorage.getItem("pq_mod_ok")==="1"){ onOk(); return; }
+  const gate=document.getElementById("gate");
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").style.display="none";
+  gate.style.display="flex";
+  const submit=()=>{
+    const v=document.getElementById("gateInput").value;
+    if(v===CONFIG.modPasscode){ try{sessionStorage.setItem("pq_mod_ok","1");}catch(e){} gate.style.display="none"; onOk(); }
+    else { document.getElementById("gateErr").textContent=t("gateWrong"); }
+  };
+  document.getElementById("gateBtn").onclick=submit;
+  document.getElementById("gateInput").addEventListener("keydown",e=>{ if(e.key==="Enter") submit(); });
+  setTimeout(()=>{ try{document.getElementById("gateInput").focus();}catch(e){} },60);
+}
+
+/* ============================================================
+   Interactive programme explorer (data from conference template)
+   ============================================================ */
+const CONF_URL = "https://prijorita.com/conference#programme";
+const SPEAKERS = {
+  spiteri:{ name:"Mrs Lisa Spiteri", initials:"LS", role:"Presenter", bio:"", url:CONF_URL },
+  genecos:{ name:"Dr Nuria Gené-Cos", initials:"NG", role:"Keynote speaker", bio:"", url:CONF_URL },
+  vanderryst:{ name:"Dr Marina van der Ryst", initials:"MR", role:"Keynote speaker · Workshop lead", bio:"", url:CONF_URL },
+  ellul:{ name:"Dr Gabriel Ellul", initials:"GE", role:"Founder, CEO & Psychiatrist · Aura Neurosystems", url:CONF_URL,
+    bio:"A Malta-based psychiatrist with a special interest in trauma, ADHD and complex PTSD. He trained within Malta's Mental Health Services and at London's Maudsley Hospital, is a Member of the Royal College of Psychiatrists (UK), holds a Master's in Bioethics, and lectures at the University of Malta." },
+  gerada:{ name:"Ms Jennifer Gerada", initials:"JG", role:"Workshop facilitator", bio:"", url:CONF_URL },
+  fardoe:{ name:"Dr Georgina Fardoe", initials:"GF", role:"Workshop facilitator", bio:"", url:CONF_URL },
+  falkowski:{ name:"Maria Falkowski", initials:"MF", role:"Conference opening", bio:"" },
+  metsola:{ name:"Dr Roberta Metsola", initials:"RM", role:"President of the European Parliament", bio:"", url:"https://robertametsola.com" }
+};
+const SCHEDULE = [
+  { time:"09:00", title:"Opening", items:[
+    { role:"Opening", who:"Maria Falkowski", speaker:"falkowski" },
+    { role:"Welcome", who:"Dr Gabriel Ellul", speaker:"ellul" },
+    { role:"Address", who:"Dr Roberta Metsola", note:"President of the European Parliament", speaker:"metsola" }
+  ]},
+  { time:"09:15", title:"Keynote I · Dr Nuria Gené-Cos", desc:"Vicarious suffering & the impact of trauma on treating clinicians", speakers:["genecos"] },
+  { time:"10:00", title:"Keynote II · Dr Marina van der Ryst", desc:"Neuroimaging & the new shape of care", speakers:["vanderryst"] },
+  { time:"10:45–11:30", title:"Keynote III · Dr Gabriel Ellul", desc:"Treatment paradoxes & new technologies for precise care", speakers:["ellul"] },
+  { time:"11:30–12:00", title:"Coffee & networking break" },
+  { time:"12:00–12:45", title:"Panel Discussion and Audience Q&A" },
+  { time:"12:45", title:"Lunch" },
+  { time:"14:00", title:"Three parallel workshops", workshops:[
+    { n:1, title:"Precision Psychiatry: Neurophenotypes & Prescribing", who:"Dr Marina van der Ryst & Ms Jennifer Gerada", tag:"For clinicians & allied professionals", speakers:["vanderryst","gerada"] },
+    { n:2, title:"Adverse Childhood Events & Life Trajectories", who:"Dr Nuria Gené-Cos & Dr Gabriel Ellul", tag:"Primarily for clinicians, non-clinicians welcome", speakers:["genecos","ellul"] },
+    { n:3, title:"Early Childhood Behaviour: A Biopsychosocial Lens", who:"Dr Georgina Fardoe", tag:"Open to all", speakers:["fardoe"] }
+  ]},
+  { time:"15:45", title:"Closing address · Dr Gabriel Ellul", speakers:["ellul"] },
+  { time:"16:00", title:"Open feedback session · Prijorità", desc:"Briefing & Q&A on our new psychiatric service" }
+];
+function chip(id){ const s=SPEAKERS[id]; const inner=`<span class="av"></span>${esc(s.name)}`;
+  return s.url ? `<a class="chip" href="${s.url}" target="_blank" rel="noopener">${inner}</a>` : `<span class="chip chip-plain">${inner}</span>`; }
+function speakerSessions(id){
+  const out=[];
+  SCHEDULE.forEach(s=>{
+    if(s.speakers && s.speakers.includes(id)) out.push({time:s.time, title:s.title, desc:s.desc});
+    if(s.items) s.items.forEach(it=>{ if(it.speaker===id) out.push({time:s.time, title:s.title+" · "+it.role, desc:it.note||""}); });
+    if(s.workshops) s.workshops.forEach(w=>{ if(w.speakers.includes(id)) out.push({time:s.time+" · Workshop "+w.n, title:w.title, desc:w.tag}); });
+  });
+  return out;
+}
+function renderSchedule(){
+  document.getElementById("scheduleList").innerHTML = SCHEDULE.map(s=>{
+    let inner=`<div><div class="stitle">${esc(s.title)}</div>`;
+    if(s.desc) inner+=`<div class="sdesc">${esc(s.desc)}</div>`;
+    if(s.speakers) inner+=`<div class="schips">${s.speakers.map(chip).join("")}</div>`;
+    if(s.items){
+      inner+=`<div style="margin-top:8px">`+s.items.map(it=>`
+        <div class="oitem"><span class="orole">${esc(it.role)}</span>${it.speaker?chip(it.speaker):`<span class="oname">${esc(it.who)}</span>`}${it.note?`<span class="onote">${esc(it.note)}</span>`:""}</div>`).join("")+`</div>`;
+    }
+    if(s.workshops){
+      inner+=`<div style="margin-top:8px">`+s.workshops.map(w=>`
+        <div class="wkshop">
+          <div class="stitle"><span class="wnum">${w.n}</span>${esc(w.title)}</div>
+          <div class="sdesc">${esc(w.who)}</div>
+          <div class="tag">${esc(w.tag)}</div>
+          <div class="schips">${w.speakers.map(chip).join("")}</div>
+        </div>`).join("")+`</div>`;
+    }
+    inner+=`</div>`;
+    return `<div class="srow"><div class="stime">${esc(s.time)}</div>${inner}</div>`;
+  }).join("");
+}
+function renderSpeakers(){
+  document.getElementById("spkGrid").innerHTML = Object.keys(SPEAKERS).map(id=>{
+    const s=SPEAKERS[id];
+    const inner=`<div class="spk-ring"><span>${esc(s.initials)}</span></div>
+      <div class="spk-name">${esc(s.name)}</div>
+      <div class="spk-role">${esc(s.role)}</div>`;
+    return s.url ? `<a class="spk-card" href="${s.url}" target="_blank" rel="noopener">${inner}</a>`
+                 : `<div class="spk-card spk-plain">${inner}</div>`;
+  }).join("");
+}
+function openSpeaker(id){
+  const s=SPEAKERS[id], sess=speakerSessions(id);
+  document.getElementById("spkDetail").innerHTML=`
+    <div class="top">
+      <div class="spk-ring"><span>${esc(s.initials)}</span></div>
+      <div><h3>${esc(s.name)}</h3><div class="spk-role">${esc(s.role)}</div></div>
+    </div>
+    ${s.bio
+      ? `<p style="margin-top:16px;line-height:1.6;color:var(--slate)">${esc(s.bio)}</p>`
+      : `<p style="margin-top:16px;color:var(--slate);font-style:italic">${t("progBioTBA")}</p>`}
+    <div style="margin-top:18px">
+      <div class="glance" style="margin-bottom:2px">${t("progSessions")}</div>
+      ${sess.map(x=>`<div class="sess"><div class="mt">${esc(x.time)}</div><div class="tt">${esc(x.title)}</div>${x.desc?`<div class="sdesc">${esc(x.desc)}</div>`:""}</div>`).join("")}
+    </div>
+    <button class="btn" style="margin-top:20px" onclick="document.getElementById('spkDetailBg').style.display='none'">${t("progClose")}</button>`;
+  document.getElementById("spkDetailBg").style.display="flex";
+}
+window.openSpeaker=openSpeaker;
+function setPTab(tab){
+  document.querySelectorAll(".prog-tab").forEach(b=>b.classList.toggle("active", b.dataset.ptab===tab));
+  document.getElementById("ptab-schedule").style.display = tab==="schedule"?"block":"none";
+  document.getElementById("ptab-speakers").style.display = tab==="speakers"?"block":"none";
+}
+function openProgramme(e){ if(e) e.preventDefault(); renderSchedule(); renderSpeakers(); setPTab("schedule");
+  document.getElementById("programme").style.display="block"; document.body.style.overflow="hidden"; }
+function closeProgramme(){ document.getElementById("programme").style.display="none";
+  document.getElementById("spkDetailBg").style.display="none"; document.body.style.overflow=""; }
+window.openProgramme=openProgramme;
+
+/* ============================================================
+   Sponsors ticker + live presence counter
+   ============================================================ */
+const SPONSORS = ["La Roche-Posay","The Learning Hub","The Professional Hub","Richmond Foundation","Playtime and Adventures","The Westin Dragonara Resort"];
+function initTickers(){
+  const items = SPONSORS.map(s=>`<span class="tick-item">${esc(s)}</span>`).join("");
+  const track = items+items+items;
+  document.querySelectorAll(".ticker-host").forEach(e=>{
+    e.innerHTML = `<span class="tick-label">${t("sponsorsWord")}</span><span class="tick-mask"><span class="tick-track">${track}</span></span>`;
+  });
+}
+const SESSION_ID = 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function presenceBeat(){
+  const now=Date.now(); let p={}; try{ p=JSON.parse(localStorage.getItem(LS.presence)||"{}"); }catch(e){}
+  p[SESSION_ID]={ ts:now, email: state.user?state.user.email:null };
+  for(const k in p){ if(!p[k]||now-p[k].ts>60000) delete p[k]; }
+  localStorage.setItem(LS.presence, JSON.stringify(p));
+  updateCounters();
+  if(CONFIG.apiBase) syncPresence();
+}
+function presenceLeave(){ try{ const p=JSON.parse(localStorage.getItem(LS.presence)||"{}"); delete p[SESSION_ID]; localStorage.setItem(LS.presence, JSON.stringify(p)); }catch(e){} }
+function registerKnown(email){ if(!email) return; let k=[]; try{ k=JSON.parse(localStorage.getItem(LS.known)||"[]"); }catch(e){} if(!k.includes(email)){ k.push(email); localStorage.setItem(LS.known, JSON.stringify(k)); } }
+function liveCounts(){
+  const now=Date.now(); let p={}; try{ p=JSON.parse(localStorage.getItem(LS.presence)||"{}"); }catch(e){}
+  let online=0; for(const k in p){ if(p[k] && now-p[k].ts<=60000 && p[k].email) online++; }
+  let known=0; try{ known=JSON.parse(localStorage.getItem(LS.known)||"[]").length; }catch(e){}
+  return {online, known};
+}
+function updateCounters(){
+  const c=liveCounts();
+  document.querySelectorAll("[data-online]").forEach(e=>e.textContent=c.online);
+  document.querySelectorAll("[data-registered]").forEach(e=>e.textContent=c.known);
+}
+
+/* ============================================================
+   Init
+   ============================================================ */
+function init(){
+  // inject botanical / neural poster motif
+  document.querySelectorAll(".bot-host").forEach(e=>{ e.innerHTML=BOTANICAL; });
+  initNeural();
+  initTickers();
+  // language toggle flags (UK / Malta)
+  document.querySelectorAll(".lang-toggle button").forEach(b=>{
+    const en=b.dataset.lang==="en";
+    b.innerHTML=(en?FLAG_GB:FLAG_MT)+(en?"EN":"MT");
+  });
+  // Conference programme button -> open interactive explorer
+  [document.getElementById("progBtn"), document.getElementById("progBtnLogin")].forEach(b=>{
+    if(!b) return; b.removeAttribute("href"); b.removeAttribute("target"); b.style.cursor="pointer";
+    b.addEventListener("click", openProgramme);
+  });
+  document.getElementById("progPrintable").href=CONFIG.programmeUrl;
+  document.getElementById("progClose").onclick=closeProgramme;
+  document.querySelectorAll(".prog-tab").forEach(b=>b.addEventListener("click",()=>setPTab(b.dataset.ptab)));
+  document.getElementById("programme").addEventListener("click",e=>{ if(e.target.id==="programme") closeProgramme(); });
+  document.getElementById("spkDetailBg").addEventListener("click",e=>{ if(e.target.id==="spkDetailBg") e.currentTarget.style.display="none"; });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeProgramme(); });
+  // robust external links: open in a new tab, but fall back to same-tab redirect
+  // if pop-ups are blocked (e.g. inside a sandboxed preview pane)
+  document.addEventListener("click",e=>{
+    const a = e.target.closest ? e.target.closest('a[target="_blank"]') : null;
+    if(!a) return;
+    const href=a.href;
+    if(!/^https?:/i.test(href)) return;
+    e.preventDefault();
+    const w = window.open(href, "_blank", "noopener");
+    if(!w){ window.location.href = href; }
+  });
+
+  document.querySelectorAll(".lang-toggle button").forEach(b=>{
+    b.addEventListener("click",()=>setLang(b.getAttribute("data-lang")));
+  });
+  applyLang();
+
+  document.getElementById("btnEnter").onclick=login;
+  document.getElementById("inEmail").addEventListener("keydown",e=>{ if(e.key==="Enter") login(); });
+  document.getElementById("btnLogout").onclick=logout;
+  const subBtn=document.getElementById("btnSubscribe");
+  if(subBtn) subBtn.onclick=()=>{
+    if(state.user){ state.user.promoOptIn=true; state.user.consentTs=state.user.consentTs||Date.now(); localStorage.setItem(LS.user,JSON.stringify(state.user)); apiPost("/subscribe",{name:state.user.name,email:state.user.email,consentTs:state.user.consentTs}); }
+    subBtn.classList.add("done"); subBtn.textContent=t("subscribedToast"); toast(t("subscribedToast"));
+  };
+  // conversational chat: Enter sends, Shift+Enter = newline
+  document.getElementById("btnSend").onclick=sendChat;
+  document.getElementById("draft").addEventListener("keydown",e=>{
+    if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); sendChat(); }
+  });
+  document.getElementById("btnSubmitRefined").onclick=()=>submitQuestion(true);
+  document.getElementById("btnSubmitVerbatim").onclick=()=>submitQuestion(false);
+  document.querySelectorAll(".sort-toggle button").forEach(b=>b.addEventListener("click",()=>setSort(b.dataset.sort)));
+  const pl=document.getElementById("privacyLinkBtn");
+  if(pl) pl.onclick=(e)=>{ e.preventDefault(); document.getElementById("privacy").style.display="flex"; };
+  const pc=document.getElementById("privacyClose");
+  if(pc) pc.onclick=()=>{ document.getElementById("privacy").style.display="none"; };
+  const pv=document.getElementById("privacy");
+  if(pv) pv.addEventListener("click",e=>{ if(e.target.id==="privacy") e.currentTarget.style.display="none"; });
+  // Help me understand box
+  const hf=document.getElementById("helpFab");
+  if(hf) hf.onclick=()=>{
+    const p=document.getElementById("helpPanel"); const open=p.classList.toggle("open");
+    if(open && !document.getElementById("helpChat").childElementCount){ helpMsg("bot", t("helpGreeting")); }
+    if(open) setTimeout(()=>{ try{document.getElementById("helpInput").focus();}catch(e){} },50);
+  };
+  const hx=document.getElementById("helpClose"); if(hx) hx.onclick=()=>document.getElementById("helpPanel").classList.remove("open");
+  const hs=document.getElementById("helpSend"); if(hs) hs.onclick=helpAsk;
+  const hi=document.getElementById("helpInput"); if(hi) hi.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); helpAsk(); } });
+  document.getElementById("vToggleDone").onclick=()=>{ state.hideDone=!state.hideDone; applyLang(); renderViewer(); };
+  document.getElementById("vExit").onclick=(e)=>{ e.preventDefault(); location.hash=""; location.search=""; location.reload(); };
+
+  window.addEventListener("storage",e=>{
+    if(e.key===LS.questions){ renderQuestions(); renderViewer(); renderDisplay(); }
+    if(e.key===LS.presence || e.key===LS.known){ updateCounters(); }
+  });
+  setInterval(()=>{
+    const v=document.getElementById("viewer"), d=document.getElementById("display");
+    if(v && v.style.display==="block") renderViewer();
+    if(d && d.style.display==="block") renderDisplay();
+  },4000);
+  // live presence heartbeat
+  presenceBeat();
+  setInterval(presenceBeat, 15000);
+  window.addEventListener("beforeunload", presenceLeave);
+  if(CONFIG.apiBase){ pullQuestions(); setInterval(pullQuestions, 4000); }
+
+  const rv=routeView();
+  if(rv==="display"||rv==="collector"){ requireGate(()=> rv==="display"?showDisplay():showViewer()); }
+  else if(state.user){ enterApp(); }
+}
+init();
+</script>
+</body>
+</html>
