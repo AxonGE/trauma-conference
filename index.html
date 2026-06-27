@@ -363,9 +363,21 @@ a.spk-card{text-decoration:none; color:inherit; display:block}
 }
 /* ---------- conversational chat input + submit bar ---------- */
 .chat-row{display:flex; gap:10px; margin-top:12px; align-items:stretch}
-.chat-row textarea{flex:1; height:54px; min-height:54px; resize:none}
+.chat-row textarea{flex:1; width:100%; height:62px; min-height:62px; resize:vertical}
 .btn-send{background:var(--navy); color:#fff; border:0; font-weight:700; padding:0 20px; flex:none}
 .btn-send:hover{filter:brightness(1.12)}
+/* two prominent compose actions */
+.compose-actions{display:flex; gap:12px; margin-top:12px}
+.compose-actions .btn{flex:1; justify-content:center; text-align:center; padding:15px 16px; font-size:15.5px; border-radius:13px; line-height:1.2}
+.btn-improve{background:#fff; border:2px solid var(--accent); color:var(--accent); font-weight:700}
+.btn-improve:hover{background:rgba(47,116,255,.08); transform:translateY(-1px)}
+.btn-submit-panel{background:linear-gradient(100deg,var(--gold),var(--gold-bright)); color:#3a2c0c; border:0; font-weight:700; box-shadow:0 4px 0 #8a6d34, 0 10px 20px rgba(176,146,92,.30)}
+.btn-submit-panel:hover{filter:brightness(1.05); transform:translateY(-1px)}
+.btn-submit-panel:active{transform:translateY(2px); box-shadow:0 2px 0 #8a6d34}
+@media(max-width:640px){
+  .compose-actions{flex-direction:column}
+  .compose-actions .btn{width:100%; padding:16px}
+}
 .submit-bar{margin-top:14px; border:1px solid var(--line-strong); border-radius:14px; padding:14px; background:rgba(176,146,92,.08)}
 .submit-bar .sb-label{font-family:var(--display); font-weight:700; color:var(--ink); margin-bottom:10px; font-size:15px}
 .btn-verbatim{background:#fff}
@@ -599,12 +611,15 @@ a.spk-card{text-decoration:none; color:inherit; display:block}
       <div class="chat" id="chat"></div>
 
       <div class="chat-row">
-        <textarea id="draft" rows="1" data-i18n-ph="draftPh" placeholder="Type your question and press Enter…"></textarea>
-        <button class="btn btn-send" id="btnSend" data-i18n="send">Send</button>
+        <textarea id="draft" rows="2" data-i18n-ph="draftPh" placeholder="Type your question…"></textarea>
+      </div>
+      <label class="anon-check"><input type="checkbox" id="anonChk"/> <span data-i18n="submitAnonChk">Submit anonymously</span></label>
+      <div class="compose-actions">
+        <button class="btn btn-improve" id="btnImprove" data-i18n="improveBtn">✦ Help me improve my question</button>
+        <button class="btn btn-submit-panel" id="btnSubmitDirect" data-i18n="submitPanelBtn">Submit question to panel</button>
       </div>
       <div class="submit-bar" id="submitBar" style="display:none">
         <div class="sb-label" data-i18n="readyPrompt">Ready to submit?</div>
-        <label class="anon-check"><input type="checkbox" id="anonChk"/> <span data-i18n="submitAnonChk">Submit anonymously</span></label>
         <div class="row-btns">
           <button class="btn btn-submit" id="btnSubmitRefined" data-i18n="submitRefined">Submit refined version</button>
           <button class="btn btn-verbatim" id="btnSubmitVerbatim" data-i18n="submitVerbatim">Submit as I wrote it</button>
@@ -847,8 +862,8 @@ const I18N = {
     logout:"Log out",
     nodeCompose:"Compose · ask your question",
     composeTitle:"Ask your question",
-    composeLead:"Type your question and press Enter. The assistant will help sharpen it, then you can submit your original or the refined version.",
-    draftPh:"Type your question and press Enter…",
+    composeLead:"Type your question, then ask the assistant to help improve it — or submit it straight to the panel.",
+    draftPh:"Type your question…",
     refine:"✦ Help me refine", submit:"Submit question",
     nodeSuggested:"Suggested refinement", useSug:"Use this version",
     privacyNote:"Prototype: accounts & questions are stored in this browser only. For a multi-device live event, a shared backend is needed.",
@@ -870,6 +885,7 @@ const I18N = {
     progBioTBA:"Full biography to be added.", progClose:"Close",
     progPrintable:"Printable version ↗",
     send:"Send", readyPrompt:"Ready to submit?",
+    improveBtn:"✦ Help me improve my question", submitPanelBtn:"Submit question to panel",
     submitRefined:"Submit refined version", submitVerbatim:"Submit as I wrote it",
     readyPromptChat:"When you're ready, submit your original question or the refined version below.",
     submittedChat:"✓ Added to the queue. Feel free to ask another question.",
@@ -912,8 +928,8 @@ const I18N = {
     logout:"Oħroġ",
     nodeCompose:"Ikteb · irfina l-mistoqsija",
     composeTitle:"Staqsi l-mistoqsija tiegħek",
-    composeLead:"Ikteb il-mistoqsija tiegħek u agħfas Enter. L-assistent jgħinek tiċċaraha, imbagħad tista' tibgħat l-oriġinal jew il-verżjoni rfinata.",
-    draftPh:"Ikteb il-mistoqsija tiegħek u agħfas Enter…",
+    composeLead:"Ikteb il-mistoqsija tiegħek, imbagħad itlob lill-assistent jgħinek ittejjibha — jew ibgħatha direttament lill-panel.",
+    draftPh:"Ikteb il-mistoqsija tiegħek…",
     refine:"✦ Għinni nirfinaha", submit:"Ibgħat il-mistoqsija",
     nodeSuggested:"Verżjoni suġġerita", useSug:"Uża din il-verżjoni",
     privacyNote:"Prototip: il-kontijiet u l-mistoqsijiet jinżammu f'dan il-browser biss. Għal avveniment fuq diversi apparati, hemm bżonn backend komuni.",
@@ -935,6 +951,7 @@ const I18N = {
     progBioTBA:"Bijografija sħiħa tiżdied aktar 'il quddiem.", progClose:"Agħlaq",
     progPrintable:"Verżjoni għall-istampar ↗",
     send:"Ibgħat", readyPrompt:"Lest biex tibgħat?",
+    improveBtn:"✦ Għinni ntejjeb il-mistoqsija", submitPanelBtn:"Ibgħat il-mistoqsija lill-panel",
     submitRefined:"Ibgħat il-verżjoni rfinata", submitVerbatim:"Ibgħat kif ktibtha",
     readyPromptChat:"Meta tkun lest, ibgħat il-mistoqsija oriġinali tiegħek jew il-verżjoni rfinata hawn taħt.",
     submittedChat:"✓ Miżjuda mal-kju. Tista' tistaqsi mistoqsija oħra.",
@@ -1297,7 +1314,24 @@ function submitQuestion(useRefined){
   pushMsg("bot", v.held ? t("heldMsg") : t("submittedChat"));
   setSubmitBar(false,false);
   state.original=""; state.refined="";
+  const dr=document.getElementById("draft"); if(dr) dr.value="";
   if(ac) ac.checked=false;
+}
+/* submit the typed question straight to the panel, no AI */
+function submitDirect(){
+  const ta=document.getElementById("draft");
+  const text = (ta.value.trim()) || state.original;
+  if(!text){ toast(t("needDraft")); return; }
+  const v=validateSubmission(text);
+  if(!v.ok){ toast(v.msg); return; }
+  const ac=document.getElementById("anonChk");
+  const anon = !!(ac && ac.checked);
+  addQuestion(text, categorise(text), "verbatim", anon, v.held);
+  toast(v.held ? t("heldMsg") : t("submitted"));
+  pushMsg("bot", v.held ? t("heldMsg") : t("submittedChat"));
+  setSubmitBar(false,false);
+  state.original=""; state.refined="";
+  ta.value=""; if(ac) ac.checked=false;
 }
 
 /* ----- "Help me understand" explainer (non-clinicians) ----- */
@@ -1609,8 +1643,9 @@ function init(){
     if(state.user){ state.user.promoOptIn=true; state.user.consentTs=state.user.consentTs||Date.now(); localStorage.setItem(LS.user,JSON.stringify(state.user)); apiPost("/subscribe",{name:state.user.name,email:state.user.email,consentTs:state.user.consentTs}); }
     subBtn.classList.add("done"); subBtn.textContent=t("subscribedToast"); toast(t("subscribedToast"));
   };
-  // conversational chat: Enter sends, Shift+Enter = newline
-  document.getElementById("btnSend").onclick=sendChat;
+  // two actions: improve (AI) and submit straight to the panel
+  document.getElementById("btnImprove").onclick=sendChat;
+  document.getElementById("btnSubmitDirect").onclick=submitDirect;
   document.getElementById("draft").addEventListener("keydown",e=>{
     if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); sendChat(); }
   });
